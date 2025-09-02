@@ -1,3 +1,5 @@
+// src/features/conversion/components/JobStatus.jsx
+
 import { useState, useEffect } from 'react';
 import api from '../../../lib/api';
 import Spinner from '../../../components/ui/Spinner.jsx';
@@ -18,7 +20,8 @@ const JobStatus = ({ jobId, onReset }) => {
         
         if (currentStatus === 'completed') {
           setStatus('completed');
-          setDownloadUrl(response.data.url);
+          // THE FIX IS HERE: Use response.data.fileUrl
+          setDownloadUrl(response.data.fileUrl);
           clearInterval(intervalId);
         } else if (currentStatus === 'failed') {
           setStatus('failed');
@@ -49,10 +52,9 @@ const JobStatus = ({ jobId, onReset }) => {
           <FiCheckCircle size={50} className="status-icon success" />
           <h3>Conversion Successful!</h3>
           <p>Your file is ready to be downloaded.</p>
-          {/* THE FIX IS HERE: Added onClick={onReset} and the 'download' attribute */}
           <a
             href={downloadUrl}
-            download
+            download // The 'download' attribute tells the browser to download the file
             onClick={onReset}
             className="download-button"
           >
