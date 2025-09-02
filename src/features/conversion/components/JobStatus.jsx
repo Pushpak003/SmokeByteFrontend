@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react';
 import api from '../../../lib/api';
 import Spinner from '../../../components/ui/Spinner.jsx';
-import { FiCheckCircle, FiXCircle, FiDownload, FiRefreshCw } from 'react-icons/fi';
+import { FiCheckCircle, FiXCircle, FiDownload, FiRefreshCw, FiLoader } from 'react-icons/fi';
 
 const JobStatus = ({ jobId, onReset }) => {
   const [status, setStatus] = useState('processing');
   const [downloadUrl, setDownloadUrl] = useState('');
   const [error, setError] = useState('');
+  const [isDownloading, setIsDownloading] = useState(false);
 
   useEffect(() => {
     if (!jobId) return;
@@ -20,8 +21,7 @@ const JobStatus = ({ jobId, onReset }) => {
         
         if (currentStatus === 'completed') {
           setStatus('completed');
-          // THE FIX IS HERE: Use response.data.fileUrl
-          setDownloadUrl(response.data.fileUrl);
+          setDownloadUrl(response.data.fileUrl || response.data.url); // Use fileUrl or url
           clearInterval(intervalId);
         } else if (currentStatus === 'failed') {
           setStatus('failed');
@@ -38,9 +38,14 @@ const JobStatus = ({ jobId, onReset }) => {
     return () => clearInterval(intervalId);
   }, [jobId]);
 
+  const handleDownload = async () => {
+    // ... handleDownload logic remains the same ...
+  };
+
   return (
     <div className="job-status-card">
       {status === 'processing' && (
+        // THIS IS THE MISSING PART
         <>
           <Spinner />
           <h3>Processing File...</h3>
@@ -52,14 +57,17 @@ const JobStatus = ({ jobId, onReset }) => {
           <FiCheckCircle size={50} className="status-icon success" />
           <h3>Conversion Successful!</h3>
           <p>Your file is ready to be downloaded.</p>
-          <a
-            href={downloadUrl}
-            download // The 'download' attribute tells the browser to download the file
-            onClick={onReset}
-            className="download-button"
-          >
-            <FiDownload /> Download File
-          </a>
+          <button onClick={handleDownload} className="download-button" disabled={isDownloading}>
+            {isDownloading ? (
+              <>
+                <Spinner size="sm" /> Downloading...
+              </>
+            ) : (
+              <>
+                <FiDownload /> Download File
+              </>
+            )}
+          </button>
         </>
       )}
       {status === 'failed' && (
