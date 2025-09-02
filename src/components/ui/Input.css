@@ -1,0 +1,45 @@
+/* src/components/ui/Input.css - UPDATED */
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-input {
+  width: 100%;
+  box-sizing: border-box; /* Yahi overflow theek karega */
+  font-size: 1rem;
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+  background: var(--background-light);
+  color: var(--text-color);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.custom-input::placeholder {
+  color: var(--text-secondary-color);
+}
+
+.custom-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.2);
+}
+
+/* Icon Styles */
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 0.8rem;
+  transform: translateY(-50%);
+  color: var(--text-secondary-color);
+  pointer-events: none; /* Icon par click na ho */
+}
+
+/* Icon ke saath input ke liye padding */
+.custom-input.has-icon {
+  padding-left: 2.5rem;
+}

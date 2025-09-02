@@ -1,0 +1,16 @@
+/* src/components/ui/Spinner.css */
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 123, 255, 0.2); /* Light blue border */
+  border-top: 4px solid var(--primary-color); /* Main blue color for the spinning part */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 2rem auto; /* Center the spinner */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
