@@ -1,9 +1,7 @@
-// src/features/history/routes/HistoryPage.jsx
-
 import { useEffect, useState } from 'react';
 import api from '../../../lib/api';
-import HistoryItem from '../components/HistoryItem'; // We will create this component next
 import Spinner from '../../../components/ui/Spinner';
+import HistoryRow from '../components/HistoryRow'; // Hum naya HistoryRow component use karenge
 
 const HistoryPage = () => {
   const [history, setHistory] = useState([]);
@@ -14,34 +12,39 @@ const HistoryPage = () => {
     const fetchHistory = async () => {
       try {
         const response = await api.get('/user/history');
-        setHistory(response.data);
+        if (response.data && Array.isArray(response.data.data)) {
+          setHistory(response.data.data);
+        }
       } catch (err) {
         setError('Could not fetch conversion history.');
       } finally {
         setLoading(false);
       }
     };
-
     fetchHistory();
   }, []);
 
-  if (loading) {
-    return <Spinner />;
-  }
-
-  if (error) {
-    return <p className="error-message">{error}</p>;
-  }
+  if (loading) { return <div className="history-container"><Spinner /></div>; }
+  if (error) { return <div className="history-container"><p className="error-message">{error}</p></div>; }
 
   return (
     <div className="history-container">
       <h2>Your Conversion History</h2>
       {history.length > 0 ? (
-        <div className="history-list">
-          {history.map((item) => (
-            <HistoryItem key={item.jobId} item={item} />
-          ))}
-        </div>
+        <table className="history-table">
+          <thead>
+            <tr>
+              <th>Preview</th>
+              <th>Details</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {history.map((item) => (
+              <HistoryRow key={item.id} item={item} />
+            ))}
+          </tbody>
+        </table>
       ) : (
         <p>You have no conversion history yet.</p>
       )}
@@ -49,4 +52,4 @@ const HistoryPage = () => {
   );
 };
 
-export default HistoryPage; // <-- This line fixes the error
+export default HistoryPage;

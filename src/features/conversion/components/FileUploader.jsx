@@ -5,7 +5,6 @@ import { FiUploadCloud, FiFileText, FiX, FiChevronsRight, FiImage, FiVideo, FiMu
 import { supportedFormats } from '../../../lib/formats';
 import FormatSelector from './FormatSelector';
 
-// Helper to get an icon based on file type
 const getFileIcon = (type = '') => {
   if (type.startsWith('image/')) return <FiImage size={40} className="file-type-icon" />;
   if (type.startsWith('video/')) return <FiVideo size={40} className="file-type-icon" />;
@@ -19,8 +18,9 @@ const FileUploader = ({ onUploadSuccess }) => {
   const [availableFormats, setAvailableFormats] = useState([]);
   const [error, setError] = useState('');
   const [isUploading, setIsUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0); // NEW: State for progress bar
+  const [uploadProgress, setUploadProgress] = useState(0);
 
+  // THIS FUNCTION WAS MISSING
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles && acceptedFiles.length > 0) {
       const currentFile = acceptedFiles[0];
@@ -42,14 +42,16 @@ const FileUploader = ({ onUploadSuccess }) => {
 
   const fileIcon = useMemo(() => getFileIcon(file?.type), [file]);
 
+  // THIS FUNCTION WAS MISSING
   const removeFile = () => {
     setFile(null);
     setAvailableFormats([]);
     setTargetFormat('');
     setError('');
-    setUploadProgress(0); // NEW: Reset progress on remove
+    setUploadProgress(0);
   };
 
+  // THIS FUNCTION WAS MISSING
   const handleSubmit = async () => {
     if (!file || !targetFormat) {
       setError('Please select a file and a target format.');
@@ -57,7 +59,7 @@ const FileUploader = ({ onUploadSuccess }) => {
     }
 
     setIsUploading(true);
-    setUploadProgress(0); // NEW: Reset progress on new upload
+    setUploadProgress(0);
     setError('');
     
     let endpoint = '';
@@ -80,7 +82,6 @@ const FileUploader = ({ onUploadSuccess }) => {
     formData.append('file', file);
     formData.append('targetFormat', targetFormat);
     
-    // NEW: Axios config for progress tracking
     const config = {
       headers: { 'Content-Type': 'multipart/form-data' },
       onUploadProgress: (progressEvent) => {
@@ -113,8 +114,8 @@ const FileUploader = ({ onUploadSuccess }) => {
           <p>or click to browse</p>
         </div>
       ) : (
-        <div className="file-preview">
-          <div className="file-details">
+        <div className="file-preview-container">
+          <div className="file-preview-header">
             <span className="file-icon">{fileIcon}</span>
             <div className="file-info">
               <strong>{file.name}</strong>
@@ -122,8 +123,7 @@ const FileUploader = ({ onUploadSuccess }) => {
             </div>
             <button onClick={removeFile} className="remove-btn" disabled={isUploading}><FiX /></button>
           </div>
-          
-          {/* NEW: Show progress bar when uploading */}
+
           {isUploading ? (
             <div className="progress-bar-container">
               <div className="progress-bar" style={{ width: `${uploadProgress}%` }}></div>
