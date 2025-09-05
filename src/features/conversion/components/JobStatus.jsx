@@ -38,10 +38,45 @@ const JobStatus = ({ jobId, onReset }) => {
     return () => clearInterval(intervalId);
   }, [jobId]);
 
-  const handleDownload = async () => {
-    // ... handleDownload logic remains the same ...
-  };
+   const handleDownload = async () => {
+    setIsDownloading(true);
+    setError('');
+    try {
+      // 1. Fetch the file from the Supabase URL
+      const response = await fetch(downloadUrl);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      // 2. Get the file data as a blob (binary data)
+      const blob = await response.blob();
+      
+      // 3. Create a temporary URL for the blob
+      const url = window.URL.createObjectURL(blob);
+      
+      // 4. Create a temporary link element to trigger the download
+      const link = document.createElement('a');
+      link.href = url;
+      const fileName = downloadUrl.split('/').pop(); // Get filename from URL
+      link.setAttribute('download', fileName); // Set the filename
+      
+      // 5. Programmatically click the link
+      document.body.appendChild(link);
+      link.click();
+      
+      // 6. Clean up by removing the link and revoking the temporary URL
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      // 7. Reset the view
+      onReset();
 
+    } catch (err) {
+      console.error('Download failed:', err);
+      setError('Could not download the file.');
+    } finally {
+      setIsDownloading(false);
+    }
+  };
   return (
     <div className="job-status-card">
       {status === 'processing' && (
