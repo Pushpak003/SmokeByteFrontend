@@ -1,21 +1,19 @@
+// src/App.jsx - FINAL VERSION
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import { AuthProvider} from './context/AuthContext.jsx';
-import {useAuth} from './hooks/useAuth.js'
-import Layout from './components/layout/Layout.jsx';
+import { AuthProvider } from './context/AuthContext';
+import { useAuth } from './hooks/useAuth';
+import Layout from './components/layout/Layout';
 import LandingPage from './pages/LandingPage.jsx';
 import LoginPage from './features/auth/routes/LoginPage.jsx';
 import SignupPage from './features/auth/routes/SignupPage.jsx';
 import DashboardPage from './features/conversion/routes/Dashboard.jsx';
-import HistoryPage from './features/history/routes/HIstoryPage.jsx';
-import './index.css';
-// ProtectedRoute component to guard dashboard and history
+import HistoryPage from './features/history/routes/HIstoryPage.jsx'
+import SupportedFormatsPage from './pages/SupportedFormatsPage.jsx';
+
 const ProtectedRoute = () => {
   const { user } = useAuth();
-  if (!user) {
-    // If no user, redirect to login page
-    return <Navigate to="/login" replace />;
-  }
-  return <Outlet />; // If user exists, render the child route (Dashboard, etc.)
+  if (!user) { return <Navigate to="/login" replace />; }
+  return <Outlet />;
 };
 
 function App() {
@@ -27,14 +25,14 @@ function App() {
           <Route index element={<LandingPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="signup" element={<SignupPage />} />
-
+          <Route path="formats" element={<SupportedFormatsPage />} />
+          
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="history" element={<HistoryPage />} />
           </Route>
           
-          {/* Fallback Route for any other path */}
           <Route path="*" element={<Navigate to="/" />} />
         </Route>
       </Routes>
