@@ -1,9 +1,9 @@
 // src/components/layout/Header.jsx
 
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth'; // Import useAuth hook
-import { FiLogOut } from 'react-icons/fi';
-import './Header.css';
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth"; // Import useAuth hook
+import { FiLogOut } from "react-icons/fi";
+import "./Header.css";
 
 const Header = () => {
   const { user, logout } = useAuth(); // Get user and logout function from context
@@ -11,12 +11,17 @@ const Header = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
     <header className="header">
       <Link to="/" className="logo">
+        <img
+          src="./src/assets/icons/Logo1.png" // <-- replace with your logo path
+          alt="SmokeByte Logo"
+          className="logo-image"
+        />
         SmokeByte
       </Link>
       <nav className="main-nav">
@@ -34,8 +39,12 @@ const Header = () => {
           <>
             <Link to="/#features">Features</Link>
             <Link to="/formats">Supported Formats</Link>
-            <Link to="/login" className="btn-login">Login</Link>
-            <Link to="/signup" className="btn-signup">Sign Up</Link>
+            <Link to="/login" className="btn-login">
+              Login
+            </Link>
+            <Link to="/signup" className="btn-signup">
+              Sign Up
+            </Link>
           </>
         )}
       </nav>
