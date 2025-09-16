@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 // Backend ka base URL. Agar aapka port alag hai (e.g., 3000), to use yahan change karein.
-const API_URL = 'http://localhost:3000'; 
+const API_URL = 'https://smokebyte-backend-latest.onrender.com'; 
 
 const api = axios.create({
   baseURL: API_URL,
