@@ -17,11 +17,7 @@ const Header = () => {
   return (
     <header className="header">
       <Link to="/" className="logo">
-        <img
-          src="./src/assets/icons/Logo1.png" // <-- replace with your logo path
-          alt="SmokeByte Logo"
-          className="logo-image"
-        />
+        <img src="/Logo1.png" alt="SmokeByte Logo" className="logo-image" />
         SmokeByte
       </Link>
       <nav className="main-nav">
