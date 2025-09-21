@@ -1,17 +1,16 @@
-/* src/components/layout/Header.css - FINAL VERSION */
+
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 0.75rem 2rem; 
   background-color: var(--card-color);
   border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
   z-index: 10;
 }
-
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
@@ -25,7 +24,7 @@
   gap: 1.5rem;
 }
 
-/* Style for regular nav links */
+
 .main-nav a {
   color: var(--text-secondary-color);
   font-weight: 500;
@@ -36,7 +35,7 @@
   text-decoration: none;
 }
 
-/* Common style for all buttons in the nav */
+
 .main-nav .btn-login,
 .main-nav .btn-signup,
 .main-nav .btn-logout {
@@ -52,7 +51,7 @@
   transition: all 0.2s ease;
 }
 
-/* Specific style for Login button */
+
 .main-nav .btn-login {
   border-color: var(--border-color);
   color: var(--text-color);
@@ -62,7 +61,7 @@
   color: var(--primary-color);
 }
 
-/* Specific style for Signup button */
+
 .main-nav .btn-signup {
   background-color: var(--primary-color);
   color: white;
@@ -72,7 +71,7 @@
   color: white;
 }
 
-/* Specific style for Logout button */
+
 .btn-logout {
   color: var(--text-secondary-color);
 }
@@ -82,13 +81,70 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 8px; /* space between logo and text */
+  gap: 8px; 
   text-decoration: none;
   color: inherit;
 }
 
 .logo-image {
-  width: 70px; /* pehle 32px tha, ab bada kar diya */
-  height: 70px; /* proportion ke hisaab se height bhi */
-  object-fit: contain; /* ensures image doesn't get stretched */
+  width: 50px; 
+  height: 50px; 
+  object-fit: contain;
+}
+.mobile-nav-toggle {
+  display: none; 
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.mobile-nav-toggle .icon-bar {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: var(--text-color);
+  margin: 5px 0;
+  transition: all 0.2s ease;
+}
+
+/* For screens smaller than 768px (Tablets and Mobile) */
+@media (max-width: 768px) {
+
+  .header .main-nav {
+    display: none; 
+
+   
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--card-color);
+    border-top: 1px solid var(--border-color);
+    flex-direction: column; 
+    align-items: flex-start;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  
+  .header .main-nav.is-open {
+    display: flex; 
+  }
+  
+  
+  .mobile-nav-toggle {
+    display: block; 
+  }
+
+
+  .header {
+   
+    padding: 0.75rem 1rem; 
+  }
+
+  .logo-image {
+    
+    width: 40px;
+    height: 40px;
+  }
 }

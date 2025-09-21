@@ -1,4 +1,4 @@
-/* src/index.css - FINAL CONSOLIDATED VERSION */
+/* src/index.css - FINAL REGENERATED VERSION */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 /* --- 1. COLOR & FONT VARIABLES --- */
@@ -14,14 +14,31 @@
   --error-color: #EF4444;
 }
 
-/* --- 2. GLOBAL & LAYOUT STYLES --- */
+/* --- 2. FOUNDATIONAL & GLOBAL STYLES --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 14px; /* Base font size for mobile */
+}
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  margin: 0;
   color: var(--text-color);
   background-color: var(--background-light);
   background-image: linear-gradient(to top right, #dbeafe 25%, #ffffff 50%, #fff0e6 100%);
   overflow-x: hidden;
+  line-height: 1.5;
+}
+
+img, picture, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
 }
 
 #root, .app-container {
@@ -43,11 +60,12 @@ a {
   font-weight: 500;
   text-decoration: none;
 }
+
 a:hover {
   text-decoration: underline;
 }
 
-/* --- 3. GENERAL CARD / CONTAINER STYLE (Consolidated) --- */
+/* --- 3. GENERAL CARD / CONTAINER STYLE --- */
 .auth-form-container,
 .uploader-card,
 .job-status-card,
@@ -62,7 +80,8 @@ a:hover {
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
   text-align: center;
 }
-.dashboard-container{
+
+.dashboard-container {
   width: 100%;
   max-width: 550px;
   background: var(--card-color);
@@ -134,6 +153,7 @@ a:hover {
   cursor: pointer;
   transition: all 0.2s ease;
 }
+
 .auth-button:hover,
 .convert-button:hover,
 .download-button:hover,
@@ -193,216 +213,57 @@ a:hover {
   text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
-
-/* --- 7. FORMAT GRID --- */
-.format-grid-container {
-  width: 100%;
-  max-width: 900px;
-  text-align: center;
-}
-
-.format-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-.format-card {
-  background: var(--card-color);
-  border: 1px solid var(--border-color);
-  border-radius: 0.75rem;
-  padding: 1.5rem;
+.uploader-card {
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.format-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-  border-color: var(--primary-color);
-}
-
-.format-icon-wrapper {
-  background-color: #F3E8FF;
-  color: var(--primary-color);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  min-height: 300px;
 }
 
-.format-arrow {
-  margin-left: auto;
-  color: var(--text-secondary-color);
-}
-
-/* --- 8. STATIC & HISTORY PAGES --- */
-.static-page-container h1, .history-container h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
-.static-page-container p {
-  color: var(--text-secondary-color);
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-}
-
-.formats-list {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.format-category h2 {
-  font-size: 1.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--border-color);
-  margin-bottom: 1rem;
-}
-
-.format-category ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.format-category li {
-  background: var(--background-light);
-  border: 1px solid var(--border-color);
-  color: var(--text-secondary-color);
-  font-weight: 500;
-  padding: 0.4rem 1rem;
-  border-radius: 99px;
-  font-size: 0.9rem;
-}
-
-.history-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-/* Add to the end of your src/index.css file */
-
-.formats-page {
-  max-width: 1000px;
-}
-
-.categories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
-  text-align: left;
-}
-
-.category-card {
-  background-color: var(--card-color);
-  border: 1px solid var(--border-color);
-  border-radius: 0.75rem;
-  overflow: hidden; /* Important for rounded corners on the header */
-}
-
-.category-header {
-  background: linear-gradient(90deg, #3B82F6, #60A5FA);
-  color: white;
-  padding: 0.8rem 1.5rem;
-}
-
-.category-header h2 {
-  font-size: 1.2rem;
-  margin: 0;
-}
-
-.category-body {
-  padding: 1.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.format-tag {
-  background-color: var(--background-light);
-  border: 1px solid var(--border-color);
-  color: var(--text-secondary-color);
-  font-weight: 500;
-  padding: 0.4rem 1rem;
-  border-radius: 99px;
-  font-size: 0.9rem;
-}
-
-.history-container {
-  max-width: 900px; /* Thoda bada container */
-}
-
-.history-table {
-  width: 100%;
-  border-collapse: collapse; /* Borders ko merge karein */
-  margin-top: 2rem;
-}
-
-.history-table th {
+.uploader-card .dropzone {
+  border: 2px dashed var(--border-color);
+  border-radius: 1rem;
+  padding: 3rem 2rem;
   text-align: center;
-  padding: 0.75rem 1rem;
-  color: var(--text-secondary-color);
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  border-bottom: 2px solid var(--border-color);
-}
-
-.history-table td {
-  padding: 1rem;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.history-table tr:last-child td {
-  border-bottom: none; /* Aakhri row ka border hatayein */
-}
-
-.file-preview-cell {
-  width: 80px;
-}
-
-.file-details-cell .filename {
-  font-weight: 600;
-  color: var(--text-color);
-}
-
-.file-details-cell .date {
-  font-size: 0.9rem;
-  color: var(--text-secondary-color);
-  margin-top: 0.25rem;
-}
-
-.file-action-cell {
-  text-align: right;
-}
-
-.btn-download-table {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 0.375rem;
-  font-weight: 500;
+  background-color: var(--card-color);
+  transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
 }
-.btn-download-table:hover {
-  background-color: var(--primary-hover-color);
+
+.uploader-card .dropzone:hover {
+  border-color: var(--primary-color);
+  background-color: #faf5ff;
+  box-shadow: 0 6px 12px rgb(0 0 0 / 0.08);
 }
-/* Add to the end of your src/index.css file */
+
+.uploader-card .dropzone.active {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 15px rgba(109, 40, 217, 0.3);
+  background-color: #f5f3ff;
+}
+
+.uploader-card .upload-icon {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.uploader-card h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+}
+
+.uploader-card p {
+  font-size: 0.95rem;
+  color: var(--text-secondary-color);
+}
 
 .file-preview-container {
   display: flex;
@@ -452,6 +313,7 @@ a:hover {
   cursor: pointer;
   padding: 0.5rem;
 }
+
 .remove-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -464,6 +326,7 @@ a:hover {
   gap: 1rem;
   width: 100%;
 }
+
 .conversion-form .convert-button {
   width: auto; 
   display: inline-flex;
@@ -493,55 +356,187 @@ a:hover {
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
-}/* === Upload Dropzone Style (FileUploader ke andar only) === */
-.uploader-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;      /* horizontal centering */
-  justify-content: center;  /* vertical centering if height is set */
-  min-height: 300px;        /* adjust as needed */
 }
 
-.uploader-card .dropzone {
-  border: 2px dashed var(--border-color);
-  border-radius: 1rem;
-  padding: 3rem 2rem;
-  text-align: center;
-  background-color: var(--card-color);
-  transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 400px; /* optional, to limit dropzone width */
-}
-
-.uploader-card .dropzone:hover {
-  border-color: var(--primary-color);
-  background-color: #faf5ff;
-  box-shadow: 0 6px 12px rgb(0 0 0 / 0.08);
-}
-
-.uploader-card .dropzone.active {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 15px rgba(109, 40, 217, 0.3); /* drag active glow */
-  background-color: #f5f3ff;
-}
-
-.uploader-card .upload-icon {
-  color: var(--primary-color);
+/* --- 7. FORMATS & HISTORY PAGES --- */
+.static-page-container h1, .history-container h2 {
+  font-size: 2rem;
   margin-bottom: 1rem;
 }
 
-.uploader-card h2 {
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin: 0.5rem 0;
+.static-page-container p {
+  color: var(--text-secondary-color);
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
 }
 
-.uploader-card p {
-  font-size: 0.95rem;
+.formats-page {
+  max-width: 1000px;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.category-card {
+  background-color: var(--card-color);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.category-header {
+  background: linear-gradient(90deg, #3B82F6, #60A5FA);
+  color: white;
+  padding: 0.8rem 1.5rem;
+}
+
+.category-header h2 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.category-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.format-tag {
+  background-color: var(--background-light);
+  border: 1px solid var(--border-color);
   color: var(--text-secondary-color);
+  font-weight: 500;
+  padding: 0.4rem 1rem;
+  border-radius: 99px;
+  font-size: 0.9rem;
+}
+
+.history-container {
+  max-width: 900px;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+
+.history-table th {
+  text-align: center;
+  padding: 0.75rem 1rem;
+  color: var(--text-secondary-color);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.history-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.history-table tr:last-child td {
+  border-bottom: none;
+}
+
+.file-preview-cell {
+  width: 80px;
+}
+
+.file-details-cell .filename {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.file-details-cell .date {
+  font-size: 0.9rem;
+  color: var(--text-secondary-color);
+  margin-top: 0.25rem;
+}
+
+.file-action-cell {
+  text-align: right;
+}
+
+.btn-download-table {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-download-table:hover {
+  background-color: var(--primary-hover-color);
+}
+
+/* --- 8. RESPONSIVE MEDIA QUERIES --- */
+
+/* For Tablets and larger screens (Desktop first approach for font scaling) */
+@media (min-width: 768px) {
+  html {
+    font-size: 15px; /* For Tablets */
+  }
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 16px; /* For Desktops */
+  }
+}
+
+/* For screens smaller than 600px (Mobile Phones) */
+@media (max-width: 600px) {
+
+  /* 1. Reduce padding on the main content area */
+  main {
+    padding: 1.5rem 1rem;
+  }
+
+  /* 2. Reduce padding and font sizes inside all major cards/containers */
+  .auth-form-container,
+  .uploader-card,
+  .job-status-card,
+  .history-container,
+  .static-page-container,
+  .dashboard-container {
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+  }
+
+  .auth-form-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .static-page-container h1, .history-container h2 {
+    font-size: 1.75rem;
+  }
+
+  /* 3. Make the file uploader dropzone simpler on mobile */
+  .uploader-card .dropzone {
+    padding: 2rem 1rem;
+  }
+
+  /* 4. Adjust the grid for single-column layout on small screens */
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* 5. Improve history table for mobile by making it scrollable */
+  .history-table {
+    display: block;
+    overflow-x: auto;
+  }
 }

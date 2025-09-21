@@ -13,3 +13,13 @@
   justify-content: center;
   gap: 1.5rem;
 }
+@media (max-width: 600px) {
+  .footer {
+    padding: 1.5rem 1rem; /* Padding thoda kam kiya */
+  }
+
+  .footer nav {
+    flex-direction: column; /* Links ko ek ke neeche ek kar diya */
+    gap: 1rem;
+  }
+}
