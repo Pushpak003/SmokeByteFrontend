@@ -2,7 +2,7 @@
 .footer {
   text-align: center;
   padding: 2rem;
-  background-color: var(--card-color);
+  background-color: transparent;
   border-top: 1px solid var(--border-color);
   color: var(--text-secondary-color);
   font-size: 0.9rem;

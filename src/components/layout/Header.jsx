@@ -1,6 +1,6 @@
 
 import { useState } from "react"; // Step 1: Import useState
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink,Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { FiLogOut } from "react-icons/fi";
 import "./Header.css";
@@ -9,14 +9,14 @@ const Header = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   
-  // Step 2: Create state to manage menu visibility
+  
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen); // Toggles between true and false
+    setIsMenuOpen(!isMenuOpen); 
   };
   
-  // This function closes the menu, useful for when a link is clicked
+
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
@@ -46,8 +46,8 @@ const Header = () => {
         {user ? (
           // --- Logged-in User View ---
           <>
-            <Link to="/dashboard" onClick={closeMenu}>Dashboard</Link>
-            <Link to="/history" onClick={closeMenu}>History</Link>
+            <NavLink to="/dashboard" onClick={closeMenu}>Dashboard</NavLink>
+            <NavLink to="/history" onClick={closeMenu}>History</NavLink>
             <button onClick={handleLogout} className="btn-logout">
               <FiLogOut /> Logout
             </button>
@@ -56,10 +56,10 @@ const Header = () => {
           // --- Logged-out User View ---
           <>
             <Link to="/#features" onClick={closeMenu}>Features</Link>
-            <Link to="/formats" onClick={closeMenu}>Supported Formats</Link>
-            <Link to="/login" className="btn-login" onClick={closeMenu}>
+            <NavLink to="/formats" onClick={closeMenu}>Supported Formats</NavLink>
+            <NavLink to="/login" className="btn-login" onClick={closeMenu}>
               Login
-            </Link>
+            </NavLink>
             <Link to="/signup" className="btn-signup" onClick={closeMenu}>
               Sign Up
             </Link>

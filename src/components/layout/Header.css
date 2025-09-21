@@ -1,22 +1,35 @@
 
-
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 2rem; 
+  padding: 0.75rem 2rem;
   background-color: var(--card-color);
   border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
   z-index: 10;
 }
+
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
   color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
 }
-.logo:hover { text-decoration: none; }
+
+.logo:hover {
+  text-decoration: none;
+}
+
+.logo-image {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
 
 .main-nav {
   display: flex;
@@ -24,15 +37,19 @@
   gap: 1.5rem;
 }
 
-
 .main-nav a {
   color: var(--text-secondary-color);
   font-weight: 500;
   transition: color 0.2s ease;
 }
+
 .main-nav a:hover {
   color: var(--primary-color);
   text-decoration: none;
+}
+
+.main-nav a.active {
+  color: var(--primary-color);
 }
 
 
@@ -53,49 +70,45 @@
 
 
 .main-nav .btn-login {
-  border-color: var(--border-color);
-  color: var(--text-color);
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  color: var(--text-secondary-color);
+  font-weight: 500;
 }
+
 .main-nav .btn-login:hover {
-  border-color: var(--primary-color);
+  border: none;
+  background-color: transparent;
   color: var(--primary-color);
 }
 
-
 .main-nav .btn-signup {
-  background-color: var(--primary-color);
-  color: white;
+  background-color: transparent;
+  color: var(--primary-color);
+  border-color: var(--primary-color);
 }
+
 .main-nav .btn-signup:hover {
   background-color: var(--primary-hover-color);
+  border-color: var(--primary-hover-color);
   color: white;
 }
-
 
 .btn-logout {
   color: var(--text-secondary-color);
 }
+
 .btn-logout:hover {
   color: var(--error-color);
 }
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 8px; 
-  text-decoration: none;
-  color: inherit;
-}
 
-.logo-image {
-  width: 50px; 
-  height: 50px; 
-  object-fit: contain;
-}
 .mobile-nav-toggle {
-  display: none; 
+  display: none;
   background: none;
   border: none;
   cursor: pointer;
+  z-index: 20; /* Ensure it's above other content */
 }
 
 .mobile-nav-toggle .icon-bar {
@@ -104,47 +117,68 @@
   height: 3px;
   background-color: var(--text-color);
   margin: 5px 0;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
-/* For screens smaller than 768px (Tablets and Mobile) */
+
+/* --- Responsive Styles for Mobile/Tablet --- */
 @media (max-width: 768px) {
+  .mobile-nav-toggle {
+    display: block;
+  }
 
+  .header {
+    padding: 0.75rem 1rem;
+  }
+
+  .logo-image {
+    width: 40px;
+    height: 40px;
+  }
+  
+  /* --- CHANGE 3: SMOOTH ANIMATION ke liye changes --- */
   .header .main-nav {
-    display: none; 
-
-   
     position: absolute;
     top: 100%;
     left: 0;
     width: 100%;
     background-color: var(--card-color);
     border-top: 1px solid var(--border-color);
-    flex-direction: column; 
+    
+    /* Animation setup */
+    display: flex; /* Display flex rehta hai ab */
+    flex-direction: column;
     align-items: flex-start;
     padding: 1rem;
     gap: 1rem;
-  }
-
-  
-  .header .main-nav.is-open {
-    display: flex; 
-  }
-  
-  
-  .mobile-nav-toggle {
-    display: block; 
-  }
-
-
-  .header {
-   
-    padding: 0.75rem 1rem; 
-  }
-
-  .logo-image {
     
-    width: 40px;
-    height: 40px;
+    /* Animation properties */
+    transform: translateY(-100%); /* Shuru me upar chupa hua hai */
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s;
+  }
+
+  /* Jab menu open ho */
+  .header .main-nav.is-open {
+    transform: translateY(0); /* Niche slide hoke aayega */
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  /* Mobile me buttons ko full-width kar sakte hain for better UX */
+  .main-nav .btn-login,
+  .main-nav .btn-signup,
+  .main-nav .btn-logout {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    justify-content: center;
+  }
+  
+  /* Login button ko normal link jaisa rakhne ke liye padding reset */
+  .main-nav .btn-login {
+     width: auto;
+     padding: 0;
+     justify-content: flex-start;
   }
 }
