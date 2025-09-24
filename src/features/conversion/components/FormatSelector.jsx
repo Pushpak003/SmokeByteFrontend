@@ -1,4 +1,5 @@
-// src/features/conversion/components/FormatSelector.jsx
+
+import { FiChevronDown } from 'react-icons/fi';
 
 const FormatSelector = ({ availableFormats, targetFormat, setTargetFormat }) => {
   if (availableFormats.length === 0) {
@@ -8,15 +9,20 @@ const FormatSelector = ({ availableFormats, targetFormat, setTargetFormat }) => 
   return (
     <div className="format-selector">
       <label htmlFor="format">Convert to:</label>
-      <select
-        id="format"
-        value={targetFormat}
-        onChange={(e) => setTargetFormat(e.target.value)}
-      >
-        {availableFormats.map(format => (
-          <option key={format} value={format}>{format}</option>
-        ))}
-      </select>
+      {/* Humne select ko ek wrapper mein daal diya hai icon ke liye */}
+      <div className="select-wrapper">
+        <select
+          id="format"
+          value={targetFormat}
+          onChange={(e) => setTargetFormat(e.target.value)}
+        >
+          {availableFormats.map(format => (
+            <option key={format} value={format}>{format}</option>
+          ))}
+        </select>
+        {/* Yahan naya icon add kiya hai */}
+        <FiChevronDown className="select-icon" />
+      </div>
     </div>
   );
 };
