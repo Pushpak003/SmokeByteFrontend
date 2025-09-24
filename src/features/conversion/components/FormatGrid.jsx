@@ -1,7 +1,7 @@
 import { supportedFormats } from '../../../lib/formats';
 import FileTypeIcon from './FileTypeIcon'; // Naya component import karein
 import { FiChevronRight } from 'react-icons/fi';
-// import './FormatGrid.css'; // Is line ko delete kar dein
+ import './FormatGrid.css'; // Is line ko delete kar dein
 
 const FormatGrid = () => {
   const allConversions = Object.entries(supportedFormats).flatMap(([mimeType, data]) => {
