@@ -1,127 +1,76 @@
-import { useState, useCallback, useMemo } from "react";
-import { useDropzone } from "react-dropzone";
-import api from "../../../lib/api";
-import {
-  FiUploadCloud,
-  FiFileText,
-  FiX,
-  FiChevronsRight,
-  FiImage,
-  FiVideo,
-  FiMusic,
-} from "react-icons/fi";
-import { supportedFormats } from "../../../lib/formats";
-import FormatSelector from "./FormatSelector";
+import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useDropzone } from 'react-dropzone';
+import api from '../../../lib/api';
+import { FiUploadCloud, FiFileText, FiX, FiChevronsRight, FiImage, FiVideo, FiMusic, FiInfo } from 'react-icons/fi';
+import { supportedFormats } from '../../../lib/formats';
+import FormatSelector from './FormatSelector';
 
-const getFileIcon = (type = "") => {
-  if (type.startsWith("image/"))
-    return <FiImage size={40} className="file-type-icon" />;
-  if (type.startsWith("video/"))
-    return <FiVideo size={40} className="file-type-icon" />;
-  if (type.startsWith("audio/"))
-    return <FiMusic size={40} className="file-type-icon" />;
-  return <FiFileText size={40} className="file-type-icon" />;
+const getFileIcon = (type = '') => {
+  if (type.startsWith('image/')) return <FiImage size={36} className="file-type-icon" />;
+  if (type.startsWith('video/')) return <FiVideo size={36} className="file-type-icon" />;
+  if (type.startsWith('audio/')) return <FiMusic size={36} className="file-type-icon" />;
+  return <FiFileText size={36} className="file-type-icon" />;
 };
 
-const FileUploader = ({ onUploadSuccess }) => {
+const FileUploader = ({ onUploadSuccess, conversionHint }) => {
   const [file, setFile] = useState(null);
-  const [targetFormat, setTargetFormat] = useState("");
+  const [targetFormat, setTargetFormat] = useState('');
   const [availableFormats, setAvailableFormats] = useState([]);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  // THIS FUNCTION WAS MISSING
   const onDrop = useCallback((acceptedFiles) => {
-    if (acceptedFiles && acceptedFiles.length > 0) {
-      const currentFile = acceptedFiles[0];
-      const formatInfo = supportedFormats[currentFile.type];
-      setFile(currentFile);
+    if (acceptedFiles?.length > 0) {
+      const f = acceptedFiles[0];
+      const formatInfo = supportedFormats[f.type];
+      setFile(f);
       if (formatInfo) {
         setAvailableFormats(formatInfo.formats);
-        setTargetFormat(formatInfo.formats[0]);
-        setError("");
+        // If user clicked a converter card, pre-select the target format
+        const preset = conversionHint?.toFormat;
+        setTargetFormat(preset && formatInfo.formats.includes(preset) ? preset : formatInfo.formats[0]);
+        setError('');
       } else {
         setAvailableFormats([]);
-        setTargetFormat("");
-        setError("This file type is not supported.");
+        setTargetFormat('');
+        setError('This file type is not supported.');
       }
     }
-  }, []);
+  }, [conversionHint]);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    multiple: false,
-    disabled: isUploading,
-  });
-
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, multiple: false });
   const fileIcon = useMemo(() => getFileIcon(file?.type), [file]);
 
-  // THIS FUNCTION WAS MISSING
   const removeFile = () => {
-    setFile(null);
-    setAvailableFormats([]);
-    setTargetFormat("");
-    setError("");
-    setUploadProgress(0);
+    setFile(null); setAvailableFormats([]); setTargetFormat('');
+    setError(''); setUploadProgress(0);
   };
 
-  // THIS FUNCTION WAS MISSING
   const handleSubmit = async () => {
-    if (!file || !targetFormat) {
-      setError("Please select a file and a target format.");
-      return;
-    }
+    if (!file || !targetFormat) { setError('Please select a file and a target format.'); return; }
+    setIsUploading(true); setUploadProgress(0); setError('');
 
-    setIsUploading(true);
-    setUploadProgress(0);
-    setError("");
-
-    let endpoint = "";
     const formatInfo = supportedFormats[file.type];
-    const fileCategory = formatInfo ? formatInfo.type : "";
-
-    if (fileCategory === "Image") {
-      endpoint = "/convert/image";
-    } else if (
-      fileCategory === "Document" ||
-      fileCategory === "Presentation" ||
-      fileCategory === "Spreadsheet"
-    ) {
-      endpoint = "/convert/document";
-    } else if (fileCategory === "Video" || fileCategory === "Audio") {
-      endpoint = "/convert/media";
-    } else {
-      setError("Cannot determine the correct conversion route.");
-      setIsUploading(false);
-      return;
-    }
+    const category = formatInfo?.type || '';
+    let endpoint = '';
+    if (category === 'Image') endpoint = '/convert/image';
+    else if (['Document','Presentation','Spreadsheet'].includes(category)) endpoint = '/convert/document';
+    else if (['Video','Audio'].includes(category)) endpoint = '/convert/media';
+    else { setError('Cannot determine conversion route.'); setIsUploading(false); return; }
 
     const formData = new FormData();
-    formData.append("file", file);
-    formData.append("targetFormat", targetFormat);
-
-    const config = {
-      headers: { "Content-Type": "multipart/form-data" },
-      onUploadProgress: (progressEvent) => {
-        if (progressEvent.total) {
-          const percentCompleted = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total,
-          );
-          setUploadProgress(percentCompleted);
-        }
-      },
-    };
+    formData.append('file', file);
+    formData.append('targetFormat', targetFormat);
 
     try {
-      const response = await api.post(endpoint, formData, config);
+      const response = await api.post(endpoint, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: (e) => setUploadProgress(Math.round((e.loaded * 100) / e.total)),
+      });
       onUploadSuccess(response.data.jobId);
     } catch (err) {
-      if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message);
-      } else {
-        setError("File upload failed. Please try again.");
-      }
+      setError(err.response?.data?.message || 'Upload failed. Please try again.');
     } finally {
       setIsUploading(false);
     }
@@ -129,65 +78,53 @@ const FileUploader = ({ onUploadSuccess }) => {
 
   return (
     <div className="uploader-card">
+      {conversionHint && !file && (
+        <div className="conversion-hint">
+          <FiInfo size={14} />
+          Upload a <strong>{conversionHint.fromLabel}</strong> file to convert it to <strong>{conversionHint.toFormat.toUpperCase()}</strong>
+        </div>
+      )}
+
       {!file ? (
-        <div
-          {...getRootProps()}
-          className={`dropzone ${isDragActive ? "active" : ""}`}
-        >
+        <div {...getRootProps()} className={`dropzone ${isDragActive ? 'active' : ''}`}>
           <input {...getInputProps()} />
-          <FiUploadCloud size={60} className="upload-icon" />
-          <h2>Drag & Drop File</h2>
-          <p>or click to browse</p>
+          <div className="dropzone-inner">
+            <div className="dropzone-icon"><FiUploadCloud size={52} /></div>
+            <h2>Drop your file here</h2>
+            <p>or <span className="browse-link">browse to upload</span></p>
+            <div className="dropzone-hint">Max file size: 50MB</div>
+          </div>
         </div>
       ) : (
         <div className="file-preview-container">
           <div className="file-preview-header">
             <span className="file-icon">{fileIcon}</span>
             <div className="file-info">
-              <strong>{file.name}</strong>
+              <strong title={file.name}>{file.name.length > 35 ? file.name.slice(0,32)+'...' : file.name}</strong>
               <span>{(file.size / 1024 / 1024).toFixed(2)} MB</span>
             </div>
-            <button
-              onClick={removeFile}
-              className="remove-btn"
-              disabled={isUploading}
-            >
-              <FiX />
-            </button>
+            <button onClick={removeFile} className="remove-btn" disabled={isUploading}><FiX /></button>
           </div>
 
           {isUploading ? (
-            <div className="progress-bar-container">
-              <div
-                className="progress-bar"
-                style={{ width: `${uploadProgress}%` }}
-              ></div>
-              <span className="progress-text">{uploadProgress}%</span>
+            <div className="upload-progress">
+              <div className="progress-bar-container">
+                <div className="progress-bar" style={{ width: `${uploadProgress}%` }} />
+                <span className="progress-text">{uploadProgress}%</span>
+              </div>
+              <p className="progress-label">Uploading your file…</p>
             </div>
           ) : (
             <div className="conversion-form">
-              <FormatSelector
-                availableFormats={availableFormats}
-                targetFormat={targetFormat}
-                setTargetFormat={setTargetFormat}
-              />
-              <button
-                onClick={handleSubmit}
-                disabled={availableFormats.length === 0 || isUploading}
-                className="convert-button"
-              >
-                {isUploading ? "Uploading..." : "Convert File"}
-                <FiChevronsRight />
+              <FormatSelector availableFormats={availableFormats} targetFormat={targetFormat} setTargetFormat={setTargetFormat} />
+              <button onClick={handleSubmit} disabled={availableFormats.length === 0} className="convert-button">
+                Convert <FiChevronsRight />
               </button>
             </div>
           )}
         </div>
       )}
-      {error && (
-        <p className="error-message" style={{ marginTop: "1rem" }}>
-          {error}
-        </p>
-      )}
+      {error && <p className="error-message" style={{marginTop:'1rem'}}>{error}</p>}
     </div>
   );
 };

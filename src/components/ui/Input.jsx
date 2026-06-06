@@ -1,5 +1,3 @@
-// src/components/ui/Input.jsx
-import './Input.css';
 
 const Input = ({ type = 'text', placeholder, value, onChange, icon, ...props }) => {
   return (

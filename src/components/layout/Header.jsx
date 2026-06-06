@@ -3,7 +3,7 @@ import { useState } from "react"; // Step 1: Import useState
 import { NavLink,Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { FiLogOut } from "react-icons/fi";
-import "./Header.css";
+
 
 const Header = () => {
   const { user, logout } = useAuth();
