@@ -1,22 +1,33 @@
-import { useState, useCallback, useMemo } from 'react';
-import { useDropzone } from 'react-dropzone';
-import api from '../../../lib/api';
-import { FiUploadCloud, FiFileText, FiX, FiChevronsRight, FiImage, FiVideo, FiMusic } from 'react-icons/fi';
-import { supportedFormats } from '../../../lib/formats';
-import FormatSelector from './FormatSelector';
+import { useState, useCallback, useMemo } from "react";
+import { useDropzone } from "react-dropzone";
+import api from "../../../lib/api";
+import {
+  FiUploadCloud,
+  FiFileText,
+  FiX,
+  FiChevronsRight,
+  FiImage,
+  FiVideo,
+  FiMusic,
+} from "react-icons/fi";
+import { supportedFormats } from "../../../lib/formats";
+import FormatSelector from "./FormatSelector";
 
-const getFileIcon = (type = '') => {
-  if (type.startsWith('image/')) return <FiImage size={40} className="file-type-icon" />;
-  if (type.startsWith('video/')) return <FiVideo size={40} className="file-type-icon" />;
-  if (type.startsWith('audio/')) return <FiMusic size={40} className="file-type-icon" />;
+const getFileIcon = (type = "") => {
+  if (type.startsWith("image/"))
+    return <FiImage size={40} className="file-type-icon" />;
+  if (type.startsWith("video/"))
+    return <FiVideo size={40} className="file-type-icon" />;
+  if (type.startsWith("audio/"))
+    return <FiMusic size={40} className="file-type-icon" />;
   return <FiFileText size={40} className="file-type-icon" />;
 };
 
 const FileUploader = ({ onUploadSuccess }) => {
   const [file, setFile] = useState(null);
-  const [targetFormat, setTargetFormat] = useState('');
+  const [targetFormat, setTargetFormat] = useState("");
   const [availableFormats, setAvailableFormats] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
@@ -29,16 +40,20 @@ const FileUploader = ({ onUploadSuccess }) => {
       if (formatInfo) {
         setAvailableFormats(formatInfo.formats);
         setTargetFormat(formatInfo.formats[0]);
-        setError('');
+        setError("");
       } else {
         setAvailableFormats([]);
-        setTargetFormat('');
-        setError('This file type is not supported.');
+        setTargetFormat("");
+        setError("This file type is not supported.");
       }
     }
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, multiple: false });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    multiple: false,
+    disabled: isUploading,
+  });
 
   const fileIcon = useMemo(() => getFileIcon(file?.type), [file]);
 
@@ -46,47 +61,55 @@ const FileUploader = ({ onUploadSuccess }) => {
   const removeFile = () => {
     setFile(null);
     setAvailableFormats([]);
-    setTargetFormat('');
-    setError('');
+    setTargetFormat("");
+    setError("");
     setUploadProgress(0);
   };
 
   // THIS FUNCTION WAS MISSING
   const handleSubmit = async () => {
     if (!file || !targetFormat) {
-      setError('Please select a file and a target format.');
+      setError("Please select a file and a target format.");
       return;
     }
 
     setIsUploading(true);
     setUploadProgress(0);
-    setError('');
-    
-    let endpoint = '';
-    const formatInfo = supportedFormats[file.type];
-    const fileCategory = formatInfo ? formatInfo.type : '';
+    setError("");
 
-    if (fileCategory === 'Image') {
-      endpoint = '/convert/image';
-    } else if (fileCategory === 'Document' || fileCategory === 'Presentation' || fileCategory === 'Spreadsheet') {
-      endpoint = '/convert/document';
-    } else if (fileCategory === 'Video' || fileCategory === 'Audio') {
-      endpoint = '/convert/media';
+    let endpoint = "";
+    const formatInfo = supportedFormats[file.type];
+    const fileCategory = formatInfo ? formatInfo.type : "";
+
+    if (fileCategory === "Image") {
+      endpoint = "/convert/image";
+    } else if (
+      fileCategory === "Document" ||
+      fileCategory === "Presentation" ||
+      fileCategory === "Spreadsheet"
+    ) {
+      endpoint = "/convert/document";
+    } else if (fileCategory === "Video" || fileCategory === "Audio") {
+      endpoint = "/convert/media";
     } else {
-      setError('Cannot determine the correct conversion route.');
+      setError("Cannot determine the correct conversion route.");
       setIsUploading(false);
       return;
     }
 
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('targetFormat', targetFormat);
-    
+    formData.append("file", file);
+    formData.append("targetFormat", targetFormat);
+
     const config = {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: { "Content-Type": "multipart/form-data" },
       onUploadProgress: (progressEvent) => {
-        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-        setUploadProgress(percentCompleted);
+        if (progressEvent.total) {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total,
+          );
+          setUploadProgress(percentCompleted);
+        }
       },
     };
 
@@ -97,7 +120,7 @@ const FileUploader = ({ onUploadSuccess }) => {
       if (err.response && err.response.data && err.response.data.message) {
         setError(err.response.data.message);
       } else {
-        setError('File upload failed. Please try again.');
+        setError("File upload failed. Please try again.");
       }
     } finally {
       setIsUploading(false);
@@ -107,7 +130,10 @@ const FileUploader = ({ onUploadSuccess }) => {
   return (
     <div className="uploader-card">
       {!file ? (
-        <div {...getRootProps()} className={`dropzone ${isDragActive ? 'active' : ''}`}>
+        <div
+          {...getRootProps()}
+          className={`dropzone ${isDragActive ? "active" : ""}`}
+        >
           <input {...getInputProps()} />
           <FiUploadCloud size={60} className="upload-icon" />
           <h2>Drag & Drop File</h2>
@@ -121,25 +147,47 @@ const FileUploader = ({ onUploadSuccess }) => {
               <strong>{file.name}</strong>
               <span>{(file.size / 1024 / 1024).toFixed(2)} MB</span>
             </div>
-            <button onClick={removeFile} className="remove-btn" disabled={isUploading}><FiX /></button>
+            <button
+              onClick={removeFile}
+              className="remove-btn"
+              disabled={isUploading}
+            >
+              <FiX />
+            </button>
           </div>
 
           {isUploading ? (
             <div className="progress-bar-container">
-              <div className="progress-bar" style={{ width: `${uploadProgress}%` }}></div>
+              <div
+                className="progress-bar"
+                style={{ width: `${uploadProgress}%` }}
+              ></div>
               <span className="progress-text">{uploadProgress}%</span>
             </div>
           ) : (
             <div className="conversion-form">
-              <FormatSelector availableFormats={availableFormats} targetFormat={targetFormat} setTargetFormat={setTargetFormat} />
-              <button onClick={handleSubmit} disabled={availableFormats.length === 0} className="convert-button">
-                Convert File <FiChevronsRight />
+              <FormatSelector
+                availableFormats={availableFormats}
+                targetFormat={targetFormat}
+                setTargetFormat={setTargetFormat}
+              />
+              <button
+                onClick={handleSubmit}
+                disabled={availableFormats.length === 0 || isUploading}
+                className="convert-button"
+              >
+                {isUploading ? "Uploading..." : "Convert File"}
+                <FiChevronsRight />
               </button>
             </div>
           )}
         </div>
       )}
-      {error && <p className="error-message" style={{marginTop: '1rem'}}>{error}</p>}
+      {error && (
+        <p className="error-message" style={{ marginTop: "1rem" }}>
+          {error}
+        </p>
+      )}
     </div>
   );
 };

@@ -1,5 +1,3 @@
-/* src/components/ui/Input.css - UPDATED */
-
 .input-wrapper {
   position: relative;
   width: 100%;
@@ -9,37 +7,37 @@
 
 .custom-input {
   width: 100%;
-  box-sizing: border-box; /* Yahi overflow theek karega */
-  font-size: 1rem;
-  padding: 0.8rem;
-  border-radius: 0.5rem;
-  border: 1px solid var(--border-color);
+  box-sizing: border-box;
+  font-size: 0.95rem;
+  padding: 0.8rem 0.875rem;
+  border-radius: 0.6rem;
+  border: 1.5px solid var(--border-color);
   background: var(--background-light);
   color: var(--text-color);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  font-family: inherit;
 }
 
-.custom-input::placeholder {
-  color: var(--text-secondary-color);
-}
+.custom-input::placeholder { color: var(--text-secondary-color); }
+
+.custom-input:hover { border-color: #C4B5FD; }
 
 .custom-input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.2);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(109,40,217,0.12);
 }
 
-/* Icon Styles */
 .input-icon {
   position: absolute;
   top: 50%;
-  left: 0.8rem;
+  left: 0.875rem;
   transform: translateY(-50%);
   color: var(--text-secondary-color);
-  pointer-events: none; /* Icon par click na ho */
+  pointer-events: none;
+  font-size: 1rem;
+  display: flex;
 }
 
-/* Icon ke saath input ke liye padding */
-.custom-input.has-icon {
-  padding-left: 2.5rem;
-}
+.custom-input.has-icon { padding-left: 2.6rem; }

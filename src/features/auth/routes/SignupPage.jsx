@@ -1,30 +1,36 @@
 // src/features/auth/routes/LoginPage.jsx
 
-import { useState } from 'react';
-import { useAuth } from '../../../hooks/useAuth';
-import { Link, useNavigate } from 'react-router-dom';
-import SignupForm from '../components/SignupForm.jsx';
+import { useState } from "react";
+import { useAuth } from "../../../hooks/useAuth";
+import { Link, useNavigate } from "react-router-dom";
+import SignupForm from "../components/SignupForm.jsx";
 
 const SignupPage = () => {
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const { signup } = useAuth();
   const navigate = useNavigate();
 
   const handleSignup = async (credentials) => {
-    setError('');
+    setError("");
+    setLoading(true);
     try {
       await signup(credentials);
-      navigate('/dashboard');
+      navigate("/dashboard");
     } catch (err) {
-      setError('Failed to create an account. Please try again.');
+      setError("Failed to create an account. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="auth-form-container">
       <h2>Create an Account</h2>
-      <SignupForm onSubmit={handleSignup} error={error} />
-      <p className="auth-switch">Already have an account? <Link to="/login">Login</Link></p>
+      <SignupForm onSubmit={handleSignup} error={error} loading={loading} />
+      <p className="auth-switch">
+        Already have an account? <Link to="/login">Login</Link>
+      </p>
     </div>
   );
 };

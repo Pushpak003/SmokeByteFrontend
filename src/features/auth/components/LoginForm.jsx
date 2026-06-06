@@ -4,12 +4,13 @@ import { useState } from 'react';
 import { FiLogIn, FiUser, FiEye,FiEyeOff,FiLock } from 'react-icons/fi';
 import Input from '../../../components/ui/Input'; // Hamara naya component
 
-const LoginForm = ({ onSubmit, error }) => {
+const LoginForm = ({ onSubmit, error, loading }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (loading) return; 
     onSubmit({ username, password });
   };
 
@@ -38,8 +39,8 @@ const LoginForm = ({ onSubmit, error }) => {
       
       {error && <p className="error-message">{error}</p>}
       
-      <button type="submit" className="auth-button">
-        <FiLogIn /> Login
+      <button type="submit" className="auth-button" disabled={loading}>
+        <FiLogIn />{loading ? "Logging in..." : "Login"}
       </button>
     </form>
   );

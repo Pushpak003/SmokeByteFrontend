@@ -1,25 +1,28 @@
-/* src/components/layout/Footer.css */
 .footer {
   text-align: center;
-  padding: 2rem;
-  background-color: transparent;
-  border-top: 1px solid var(--border-color);
+  padding: 1.5rem 2rem;
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(109,40,217,0.08);
   color: var(--text-secondary-color);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
 }
+
 .footer nav {
   margin-top: 0.5rem;
   display: flex;
   justify-content: center;
   gap: 1.5rem;
 }
-@media (max-width: 600px) {
-  .footer {
-    padding: 1.5rem 1rem; /* Padding thoda kam kiya */
-  }
 
-  .footer nav {
-    flex-direction: column; /* Links ko ek ke neeche ek kar diya */
-    gap: 1rem;
-  }
+.footer nav a {
+  color: var(--text-secondary-color);
+  font-weight: 400;
+  transition: color 0.2s;
+}
+.footer nav a:hover { color: var(--primary-color); text-decoration: none; }
+
+@media (max-width: 600px) {
+  .footer { padding: 1.25rem 1rem; }
+  .footer nav { flex-direction: column; gap: 0.75rem; }
 }

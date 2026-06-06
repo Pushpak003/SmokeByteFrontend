@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { FiUserPlus, FiEye, FiEyeOff } from "react-icons/fi";
 import Input from "../../../components/ui/Input";
-const SignupForm = ({ onSubmit, error }) => {
+const SignupForm = ({ onSubmit, error, loading }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState(""); // New state for confirm password
@@ -12,6 +12,7 @@ const SignupForm = ({ onSubmit, error }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (loading) return; // Prevent multiple submissions
     if (password !== confirmPassword) {
       setLocalError("Passwords do not match!");
       return;
@@ -61,8 +62,9 @@ const SignupForm = ({ onSubmit, error }) => {
       {(error || localError) && (
         <p className="error-message">{error || localError}</p>
       )}
-      <button type="submit" className="auth-button">
-        <FiUserPlus /> Create Account
+      <button type="submit" className="auth-button" disabled={loading}>
+        <FiUserPlus />
+        {loading ? "Creating Account..." : "Create Account"}
       </button>
     </form>
   );

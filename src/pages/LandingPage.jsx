@@ -1,62 +1,53 @@
-// src/pages/LandingPage.jsx
-
 import { Link } from 'react-router-dom';
-import { FiArrowRight, FiCheckCircle, FiShuffle, FiLock, FiZap, FiBox, FiCloud } from 'react-icons/fi';
+import { FiArrowRight, FiCheckCircle, FiShuffle, FiLock, FiZap, FiBox, FiCloud, FiPlay } from 'react-icons/fi';
 import './LandingPage.css';
+
+const features = [
+  { icon: <FiShuffle size={22} />, title: 'Comprehensive Format Support', desc: 'Convert between the most popular formats for documents, images, audio, and video.' },
+  { icon: <FiZap size={22} />, title: 'Lightning-Fast Conversions', desc: 'Powered by async workers — your files process in the background, no waiting around.' },
+  { icon: <FiLock size={22} />, title: 'Bank-Grade Security', desc: '256-bit SSL encryption protects your data. All files are automatically deleted after processing.' },
+  { icon: <FiBox size={22} />, title: 'No Software to Install', desc: 'SmokeByte works entirely in your browser. No downloads or installations required.' },
+  { icon: <FiCheckCircle size={22} />, title: 'High-Quality Results', desc: 'Advanced conversion tools ensure your file quality and structure are preserved.' },
+  { icon: <FiCloud size={22} />, title: 'Cloud-Based', desc: 'Access your converted files from anywhere. All conversions happen on secure cloud infrastructure.' },
+];
 
 const LandingPage = () => {
   return (
     <div className="landing-page">
       <section className="hero-section">
-        <h1>The Ultimate File Converter</h1>
-        <p className="subtitle">Quickly and easily convert your documents, images, and media files online. Secure, fast, and free.</p>
-        <Link to="/signup" className="cta-button">
-          Get Started for Free <FiArrowRight />
-        </Link>
+        <div className="hero-badge">
+          <FiZap size={12} /> Free · Fast · Secure
+        </div>
+        <h1>
+          Convert Any File,<br />
+          <span>Instantly Online</span>
+        </h1>
+        <p className="subtitle">
+          Documents, images, audio, video — convert between hundreds of formats in seconds. No software needed.
+        </p>
+        <div className="hero-actions">
+          <Link to="/signup" className="cta-button">
+            Get Started Free <FiArrowRight />
+          </Link>
+          <Link to="/formats" className="cta-secondary">
+            <FiPlay size={15} /> See All Formats
+          </Link>
+        </div>
       </section>
 
-      {/* THIS IS THE NEW, UPGRADED FEATURES SECTION */}
       <section id="features" className="features-section">
         <h2>Everything You Need, All in One Place</h2>
-        <p className="features-subtitle">Our powerful tools are designed to handle any conversion task with ease.</p>
+        <p className="features-subtitle">
+          Powerful tools designed to handle any conversion task with ease.
+        </p>
         <div className="features-grid">
-          
-          <div className="feature-card">
-            <FiShuffle size={32} className="feature-icon" />
-            <h3>Comprehensive Format Support</h3>
-            <p>Convert between hundreds of the most popular file formats for documents, images, audio, and video.</p>
-          </div>
-
-          <div className="feature-card">
-            <FiZap size={32} className="feature-icon" />
-            <h3>Lightning-Fast Conversions</h3>
-            <p>Our powerful servers process your files in seconds, so you don't have to wait.</p>
-          </div>
-          
-          <div className="feature-card">
-            <FiLock size={32} className="feature-icon" />
-            <h3>Bank-Grade Security</h3>
-            <p>We use 256-bit SSL encryption to protect your data, and all files are automatically deleted after a few hours.</p>
-          </div>
-
-          <div className="feature-card">
-            <FiBox size={32} className="feature-icon" />
-            <h3>No Software to Install</h3>
-            <p>SmokeByte works entirely in your browser. No downloads or installations required.</p>
-          </div>
-
-          <div className="feature-card">
-            <FiCheckCircle size={32} className="feature-icon" />
-            <h3>High-Quality Results</h3>
-            <p>We use advanced conversion APIs to ensure your file's quality is preserved.</p>
-          </div>
-
-          <div className="feature-card">
-            <FiCloud size={32} className="feature-icon" />
-            <h3>Cloud-Based</h3>
-            <p>Access your converted files from anywhere. All conversions happen on our secure cloud infrastructure.</p>
-          </div>
-
+          {features.map((f, i) => (
+            <div className="feature-card" key={i}>
+              <div className="feature-icon-wrap">{f.icon}</div>
+              <h3>{f.title}</h3>
+              <p>{f.desc}</p>
+            </div>
+          ))}
         </div>
       </section>
     </div>

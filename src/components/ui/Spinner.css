@@ -1,16 +1,26 @@
-/* src/components/ui/Spinner.css */
-
 .spinner {
+  border-radius: 50%;
+  animation: spin 0.85s linear infinite;
+  margin: 0 auto;
+  flex-shrink: 0;
+}
+
+.spinner--md {
   width: 40px;
   height: 40px;
-  border: 4px solid rgba(0, 123, 255, 0.2); /* Light blue border */
-  border-top: 4px solid var(--primary-color); /* Main blue color for the spinning part */
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 2rem auto; /* Center the spinner */
+  border: 3px solid rgba(109, 40, 217, 0.15);
+  border-top-color: var(--primary-color);
+  margin: 2rem auto;
+}
+
+.spinner--sm {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  display: inline-block;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  to { transform: rotate(360deg); }
 }

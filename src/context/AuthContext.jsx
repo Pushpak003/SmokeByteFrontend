@@ -1,5 +1,3 @@
-// src/context/AuthContext.jsx
-
 import { createContext, useState, useEffect } from "react";
 import api from "../lib/api.js";
 
@@ -9,16 +7,15 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-   useEffect(() => {
+  useEffect(() => {
     const checkUserLoggedIn = async () => {
       const accessToken = localStorage.getItem('accessToken');
       if (accessToken) {
         try {
           const response = await api.get('/user/me');
           setUser(response.data);
-        } catch (error) {
-          console.error("Auth check failed, interceptor will handle logout.", error);
-          setUser(null); 
+        } catch {
+          setUser(null);
         }
       }
       setLoading(false);
@@ -28,26 +25,32 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     const response = await api.post('/auth/login', credentials);
-    const { accessToken, user } = response.data;
+    const { accessToken, refreshToken, user } = response.data;
     localStorage.setItem('accessToken', accessToken);
+    if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
     setUser(user);
     return user;
   };
 
+  // Fix: correct endpoint is /auth/register, and we log in after signup
   const signup = async (userData) => {
-    await api.post('/auth/signup', userData);
+    const response = await api.post('/auth/signup', userData);
+    const { accessToken, refreshToken, user } = response.data;
+    localStorage.setItem('accessToken', accessToken);
+    if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+    setUser(user);
+    return user;
   };
 
   const logout = () => {
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     setUser(null);
-    api.post('/auth/logout');
+    api.post('/auth/logout').catch(() => {});
   };
 
-  const authContextValue = { user, loading, login, signup, logout };
-
   return (
-    <AuthContext.Provider value={authContextValue}>
+    <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
       {!loading && children}
     </AuthContext.Provider>
   );

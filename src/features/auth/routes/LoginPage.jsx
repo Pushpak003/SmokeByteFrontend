@@ -7,23 +7,27 @@ import LoginForm from '../components/LoginForm.jsx';
 
 const LoginPage = () => {
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (credentials) => {
     setError('');
+    setLoading(true);
     try {
       await login(credentials);
       navigate('/dashboard');
     } catch (err) {
       setError('Failed to login. Please check your credentials.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="auth-form-container">
       <h2>Welcome Back!</h2>
-      <LoginForm onSubmit={handleLogin} error={error} />
+      <LoginForm onSubmit={handleLogin} error={error} loading={loading} />
       <p className="auth-switch">Don't have an account? <Link to="/signup">Sign Up</Link></p>
     </div>
   );
