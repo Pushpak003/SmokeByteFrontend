@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://smokebyte-backend-latest.onrender.com';
-
+const API_URL = import.meta.env.VITE_API_URL;
 export const useServerStatus = () => {
   const [status, setStatus] = useState('checking'); // 'checking' | 'online' | 'offline'
 
