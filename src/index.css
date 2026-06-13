@@ -568,3 +568,60 @@ img, svg { max-width: 100%; }
   .categories-grid { grid-template-columns: 1fr; }
   .job-status-card { padding: 1.75rem 1.25rem; }
 }
+
+/* ── CURSOR FIXES ───────────────────────────────────── */
+/* Prevent text I-beam cursor appearing on non-text elements */
+h1, h2, h3, h4, h5, h6,
+p, span, label, li, td, th,
+div, section, header, footer,
+nav, main, article, aside {
+  cursor: default;
+}
+
+/* Restore pointer where needed */
+a, button,
+[role="button"],
+.format-card,
+.status-badge,
+.feature-card,
+.category-card,
+.remove-btn,
+.dropzone,
+select,
+input[type="checkbox"],
+input[type="radio"] {
+  cursor: pointer;
+}
+
+/* Restore text cursor on actual inputs */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="search"],
+textarea {
+  cursor: text;
+}
+
+/* Convert another file button */
+.convert-another-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  color: var(--text-2);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.18s ease;
+}
+.convert-another-button:hover {
+  border-color: var(--purple);
+  color: var(--purple);
+  background: var(--purple-light);
+}
