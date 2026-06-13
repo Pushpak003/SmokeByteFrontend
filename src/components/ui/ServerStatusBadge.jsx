@@ -4,8 +4,8 @@ import './ServerStatusBadge.css';
 
 const CONFIG = {
   checking: { dot: 'dot--pulse',   label: 'Checking…',     color: 'badge--checking' },
-  online:   { dot: 'dot--online',  label: 'Server Online',  color: 'badge--online'   },
-  offline:  { dot: 'dot--offline', label: 'Server Offline', color: 'badge--offline'  },
+  online:   { dot: 'dot--online',  label: 'Server Online ↗',  color: 'badge--online'   },
+  offline:  { dot: 'dot--offline', label: 'Server Offline — Why?', color: 'badge--offline'  },
 };
 
 const ServerStatusBadge = () => {
