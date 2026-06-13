@@ -1,20 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useServerStatus } from '../../hooks/userServerStatus';
 import './ServerStatusBadge.css';
 
 const CONFIG = {
-  checking: { dot: 'dot--pulse',  label: 'Checking…',     color: 'badge--checking' },
-  online:   { dot: 'dot--online', label: 'Server Online',  color: 'badge--online'   },
-  offline:  { dot: 'dot--offline',label: 'Server Offline', color: 'badge--offline'  },
+  checking: { dot: 'dot--pulse',   label: 'Checking…',     color: 'badge--checking' },
+  online:   { dot: 'dot--online',  label: 'Server Online',  color: 'badge--online'   },
+  offline:  { dot: 'dot--offline', label: 'Server Offline', color: 'badge--offline'  },
 };
 
 const ServerStatusBadge = () => {
   const status = useServerStatus();
   const [open, setOpen] = useState(false);
+  const wrapperRef = useRef(null);
   const { dot, label, color } = CONFIG[status];
 
+  // Close on outside click
+  useEffect(() => {
+    if (!open) return;
+    const handleClick = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [open]);
+
   return (
-    <div className="status-badge-wrapper">
+    <div className="status-badge-wrapper" ref={wrapperRef}>
       <button
         className={`status-badge ${color}`}
         onClick={() => setOpen(o => !o)}
@@ -25,29 +38,32 @@ const ServerStatusBadge = () => {
       </button>
 
       {open && (
-        <>
-          <div className="status-popover-backdrop" onClick={() => setOpen(false)} />
-          <div className="status-popover">
-            <div className="status-popover__header">
-              <span className={`status-dot ${dot}`} />
-              <strong>{status === 'online' ? 'Server Online' : status === 'offline' ? 'Server Offline' : 'Checking…'}</strong>
-            </div>
-            <p className="status-popover__body">
-              {status === 'online'
-                ? 'The SmokeByte backend is up and reachable. All features — login, uploads, conversions, and downloads — are available.'
-                : status === 'offline'
-                ? 'The SmokeByte backend is currently unreachable. Login, uploads, conversions, and downloads will be unavailable until the server comes back online.'
-                : 'Checking server availability…'}
-            </p>
-            <div className="status-popover__notice">
-              <span className="notice-icon">⚠️</span>
-              <span>
-                <strong>Demo Environment</strong> — SmokeByte runs on a self-hosted backend server.
-                Availability depends on server uptime.
-              </span>
-            </div>
+        <div className="status-popover">
+          <div className="status-popover__header">
+            <span className={`status-dot ${dot}`} />
+            <strong>
+              {status === 'online'  ? 'Server Online'
+             : status === 'offline' ? 'Server Offline'
+             :                        'Checking…'}
+            </strong>
           </div>
-        </>
+
+          <p className="status-popover__body">
+            {status === 'online'
+              ? 'Backend is up and reachable. Login, uploads, conversions, and downloads are all working.'
+              : status === 'offline'
+              ? 'Backend is currently unreachable. Login, uploads, conversions, and downloads are unavailable right now.'
+              : 'Checking server availability…'}
+          </p>
+
+          <div className="status-popover__notice">
+            <span className="notice-icon">⚠️</span>
+            <span>
+              <strong>Heads up!</strong>
+              This backend runs on my personal laptop. The server is only online when I turn on my tunnel — so if it's offline, that just means my laptop is off or the tunnel isn't active. Try again later!
+            </span>
+          </div>
+        </div>
       )}
     </div>
   );
