@@ -1,30 +1,20 @@
-
-import { useState } from "react"; // Step 1: Import useState
-import { NavLink,Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
-import { FiLogOut } from "react-icons/fi";
-
+import { useState } from 'react';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+import { FiLogOut } from 'react-icons/fi';
+import ServerStatusBadge from '../ui/ServerStatusBadge';
 
 const Header = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  
-  
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen); 
-  };
-  
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
+  const closeMenu = () => setIsMenuOpen(false);
 
   const handleLogout = () => {
     logout();
-    closeMenu(); // Close menu on logout
-    navigate("/login");
+    closeMenu();
+    navigate('/login');
   };
 
   return (
@@ -34,35 +24,28 @@ const Header = () => {
         SmokeByte
       </Link>
 
-      {/* Step 3: Add the hamburger button for mobile view */}
-      <button className="mobile-nav-toggle" onClick={toggleMenu}>
-        <span className="icon-bar"></span>
-        <span className="icon-bar"></span>
-        <span className="icon-bar"></span>
+      <button className="mobile-nav-toggle" onClick={() => setIsMenuOpen(o => !o)} aria-label="Toggle menu">
+        <span className="icon-bar" />
+        <span className="icon-bar" />
+        <span className="icon-bar" />
       </button>
 
-      {/* Step 4: Apply dynamic class based on state */}
-      <nav className={`main-nav ${isMenuOpen ? "is-open" : ""}`}>
+      <nav className={`main-nav ${isMenuOpen ? 'is-open' : ''}`}>
         {user ? (
-          // --- Logged-in User View ---
           <>
             <NavLink to="/dashboard" onClick={closeMenu}>Dashboard</NavLink>
-            <NavLink to="/history" onClick={closeMenu}>History</NavLink>
+            <NavLink to="/history"   onClick={closeMenu}>History</NavLink>
+            <ServerStatusBadge />
             <button onClick={handleLogout} className="btn-logout">
-              <FiLogOut /> Logout
+              <FiLogOut size={14} /> Logout
             </button>
           </>
         ) : (
-          // --- Logged-out User View ---
           <>
-            <Link to="/#features" onClick={closeMenu}>Features</Link>
-            <NavLink to="/formats" onClick={closeMenu}>Supported Formats</NavLink>
-            <NavLink to="/login" className="btn-login" onClick={closeMenu}>
-              Login
-            </NavLink>
-            <Link to="/signup" className="btn-signup" onClick={closeMenu}>
-              Sign Up
-            </Link>
+            <NavLink to="/formats"  onClick={closeMenu}>Formats</NavLink>
+            <ServerStatusBadge />
+            <NavLink to="/login"    className="btn-login"  onClick={closeMenu}>Login</NavLink>
+            <Link    to="/signup"   className="btn-signup" onClick={closeMenu}>Sign Up</Link>
           </>
         )}
       </nav>
