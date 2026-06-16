@@ -20,11 +20,16 @@ const Header = () => {
   return (
     <header className="header">
       <Link to="/" className="logo" onClick={closeMenu}>
-        <img src="/Logo1.png" alt="SmokeByte Logo" className="logo-image" />
-        SmokeByte
+        <img src="/logo.png" alt="SmokeByte" className="logo-image" />
+        <span className="logo-text">SmokeByte</span>
       </Link>
 
-      <button className="mobile-nav-toggle" onClick={() => setIsMenuOpen(o => !o)} aria-label="Toggle menu">
+      <button
+        className={`mobile-nav-toggle ${isMenuOpen ? 'is-active' : ''}`}
+        onClick={() => setIsMenuOpen((o) => !o)}
+        aria-label="Toggle menu"
+        aria-expanded={isMenuOpen}
+      >
         <span className="icon-bar" />
         <span className="icon-bar" />
         <span className="icon-bar" />
@@ -34,18 +39,20 @@ const Header = () => {
         {user ? (
           <>
             <NavLink to="/dashboard" onClick={closeMenu}>Dashboard</NavLink>
-            <NavLink to="/history"   onClick={closeMenu}>History</NavLink>
+            <NavLink to="/history" onClick={closeMenu}>History</NavLink>
             <ServerStatusBadge />
+            <span className="nav-divider" />
             <button onClick={handleLogout} className="btn-logout">
               <FiLogOut size={14} /> Logout
             </button>
           </>
         ) : (
           <>
-            <NavLink to="/formats"  onClick={closeMenu}>Formats</NavLink>
+            <NavLink to="/formats" onClick={closeMenu}>Formats</NavLink>
             <ServerStatusBadge />
-            <NavLink to="/login"    className="btn-login"  onClick={closeMenu}>Login</NavLink>
-            <Link    to="/signup"   className="btn-signup" onClick={closeMenu}>Sign Up</Link>
+            <span className="nav-divider" />
+            <NavLink to="/login" className="btn-login" onClick={closeMenu}>Login</NavLink>
+            <Link to="/signup" className="btn-signup" onClick={closeMenu}>Sign Up</Link>
           </>
         )}
       </nav>
