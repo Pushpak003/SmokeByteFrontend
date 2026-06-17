@@ -19,7 +19,6 @@
   white-space: nowrap;
   letter-spacing: 0.01em;
 }
-
 .badge--checking {
   background: #f3f4f6;
   border-color: #e5e7eb;
@@ -63,7 +62,6 @@
 .dot--offline {
   background: #ef4444;
 }
-
 @keyframes ping {
   0%   { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); }
   70%  { box-shadow: 0 0 0 6px rgba(16,185,129,0); }
@@ -78,6 +76,7 @@
   position: fixed;
   inset: 0;
   z-index: 299;
+  display: none;
 }
 
 /* ── Popover ── */
@@ -94,12 +93,10 @@
   z-index: 300;
   animation: popIn 0.18s ease both;
 }
-
 @keyframes popIn {
   from { opacity: 0; transform: translateY(-6px) scale(0.97); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
-
 /* small arrow pointing up */
 .status-popover::before {
   content: '';
@@ -125,14 +122,12 @@
   font-weight: 700;
   color: #111827;
 }
-
 .status-popover__body {
   font-size: 0.84rem;
   color: #4b5563;
   line-height: 1.65;
   margin-bottom: 0.875rem;
 }
-
 .status-popover__notice {
   display: flex;
   gap: 8px;
@@ -145,10 +140,31 @@
   color: #92400e;
   line-height: 1.55;
 }
-
 .notice-icon { font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
 .status-popover__notice strong { display: block; font-weight: 700; margin-bottom: 2px; color: #78350f; }
 
-@media (max-width: 480px) {
-  .status-popover { right: -1rem; width: 280px; }
+@media (max-width: 768px) {
+  .status-popover-backdrop {
+    display: block;
+    background: rgba(15, 12, 35, 0.5);
+    backdrop-filter: blur(3px);
+  }
+
+  .status-popover {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, -50%);
+    width: min(320px, 88vw);
+    z-index: 1000;
+    max-height: 80vh;
+    overflow-y: auto;
+    border-radius: 1.25rem;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.25), 0 8px 24px rgba(0,0,0,0.12);
+  }
+
+  .status-popover::before {
+    display: none;
+  }
 }
