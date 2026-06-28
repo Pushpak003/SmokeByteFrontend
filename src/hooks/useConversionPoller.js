@@ -4,7 +4,6 @@ import api from '../lib/api';
 const POLL_MS      = 3000;
 const MAX_404_WAIT = 10000;
 
-// Call this at upload time so permission dialog appears BEFORE user navigates away
 export const requestNotifPermission = async () => {
   if (!('Notification' in window)) return;
   if (Notification.permission === 'default') {
@@ -14,10 +13,15 @@ export const requestNotifPermission = async () => {
 
 export const sendBrowserNotif = (title, body) => {
   if (!('Notification' in window)) return;
-  if (Notification.permission === 'granted') {
-    new Notification(title, { body, icon: '/logo.png' });
-  }
-  // Already asked at upload time — don't ask again here
+  if (Notification.permission !== 'granted') return;
+
+  const notif = new Notification(title, { body, icon: '/logo.png' });
+
+  // Click on browser notification → focus this tab
+  notif.onclick = () => {
+    window.focus();
+    notif.close();
+  };
 };
 
 const useConversionPoller = ({ jobId, onDone, onTick }) => {

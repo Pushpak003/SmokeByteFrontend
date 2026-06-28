@@ -26,7 +26,6 @@ const ProtectedRoute = () => {
   return <Outlet />;
 };
 
-// Reads from shared ActiveJobContext — always sees the latest jobId
 const GlobalPoller = () => {
   const { jobId, clearJob } = useActiveJobContext();
   const toast = useToastContext();
@@ -37,8 +36,15 @@ const GlobalPoller = () => {
     onDone: (data) => {
       clearJob();
       if (data.status === 'completed') {
-        toast.success('✅ File converted! Go to Dashboard to download.');
-        sendBrowserNotif('SmokeByte — Done!', `${data.filename || 'Your file'} is ready to download.`);
+        // Pass onClick — user click kare to dashboard pe pahunch jaye
+        toast.success(
+          '✅ Converted! Click to download.',
+          (navigate) => navigate('/dashboard')
+        );
+        sendBrowserNotif(
+          'SmokeByte — Done!',
+          `${data.filename || 'Your file'} is ready. Click to open SmokeByte.`
+        );
       } else {
         toast.error('❌ Conversion failed. Please try again.');
         sendBrowserNotif('SmokeByte — Failed', data.error || 'Conversion failed.');

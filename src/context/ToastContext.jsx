@@ -6,9 +6,10 @@ let _id = 0;
 export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
-  const add = useCallback((message, type = 'success') => {
+  // onClick is optional — (navigate) => navigate('/somewhere')
+  const add = useCallback((message, type = 'success', onClick = null) => {
     const id = ++_id;
-    setToasts(prev => [...prev, { id, message, type }]);
+    setToasts(prev => [...prev, { id, message, type, onClick }]);
   }, []);
 
   const remove = useCallback((id) => {
@@ -16,7 +17,12 @@ export const ToastProvider = ({ children }) => {
   }, []);
 
   return (
-    <ToastContext.Provider value={{ toasts, remove, success: (m) => add(m, 'success'), error: (m) => add(m, 'error') }}>
+    <ToastContext.Provider value={{
+      toasts,
+      remove,
+      success: (msg, onClick) => add(msg, 'success', onClick),
+      error:   (msg, onClick) => add(msg, 'error',   onClick),
+    }}>
       {children}
     </ToastContext.Provider>
   );
@@ -24,6 +30,6 @@ export const ToastProvider = ({ children }) => {
 
 export const useToastContext = () => {
   const ctx = useContext(ToastContext);
-  if (!ctx) throw new Error('useToastContext must be used inside ToastProvider');
+  if (!ctx) throw new Error('useToastContext must be inside ToastProvider');
   return ctx;
 };
