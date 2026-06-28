@@ -5,9 +5,12 @@ import {
   FiCheckCircle, FiXCircle, FiDownload,
   FiRefreshCw, FiPlusCircle, FiClock
 } from 'react-icons/fi';
-import useConversionPoller, { sendBrowserNotif } from '../../../hooks/useConversionPoller';
+import useConversionPoller from '../../../hooks/useConversionPoller';
 
-const JobStatus = ({ jobId, onReset, toast }) => {
+// JobStatus only handles UI display on the dashboard.
+// The actual completion logic (toast + browser notif) is handled by
+// GlobalPoller in App.jsx — so it works even when user is on other pages.
+const JobStatus = ({ jobId, onReset }) => {
   const [status,        setStatus]        = useState('pending');
   const [fileId,        setFileId]        = useState(null);
   const [filename,      setFilename]      = useState('');
@@ -15,6 +18,7 @@ const JobStatus = ({ jobId, onReset, toast }) => {
   const [error,         setError]         = useState('');
   const [isDownloading, setIsDownloading] = useState(false);
 
+  // Only tracks UI state — no toast/notif here (GlobalPoller handles that)
   useConversionPoller({
     jobId,
     onTick: (s) => setStatus(s),
@@ -24,15 +28,8 @@ const JobStatus = ({ jobId, onReset, toast }) => {
         setFileId(data.fileId);
         setFilename(data.filename || '');
         setTargetFormat(data.targetFormat || '');
-        // Clear persisted jobId — job is done
-        localStorage.removeItem('smokebyte_active_job');
-        toast?.success('✅ File converted! Ready to download.');
-        sendBrowserNotif('SmokeByte — Done!', `${data.filename || 'Your file'} is ready.`);
       } else {
         setError(data.error || 'Conversion failed.');
-        localStorage.removeItem('smokebyte_active_job');
-        toast?.error('❌ Conversion failed. Please try again.');
-        sendBrowserNotif('SmokeByte — Failed', data.error || 'Conversion failed.');
       }
     },
   });
@@ -64,7 +61,6 @@ const JobStatus = ({ jobId, onReset, toast }) => {
 
   return (
     <div className="job-status-card">
-
       {status === 'pending' && (
         <>
           <FiClock size={52} className="status-icon pending" />
@@ -73,7 +69,6 @@ const JobStatus = ({ jobId, onReset, toast }) => {
           <p className="status-leave-note">You can leave this page — we'll notify you when done.</p>
         </>
       )}
-
       {status === 'processing' && (
         <>
           <Spinner />
@@ -82,7 +77,6 @@ const JobStatus = ({ jobId, onReset, toast }) => {
           <p className="status-leave-note">You can leave this page — we'll notify you when done.</p>
         </>
       )}
-
       {status === 'completed' && (
         <>
           <FiCheckCircle size={52} className="status-icon success" />
@@ -99,7 +93,6 @@ const JobStatus = ({ jobId, onReset, toast }) => {
           {error && <p className="error-message">{error}</p>}
         </>
       )}
-
       {status === 'failed' && (
         <>
           <FiXCircle size={52} className="status-icon error" />
@@ -110,7 +103,6 @@ const JobStatus = ({ jobId, onReset, toast }) => {
           </button>
         </>
       )}
-
     </div>
   );
 };

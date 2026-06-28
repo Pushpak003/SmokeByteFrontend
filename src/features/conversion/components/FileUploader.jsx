@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import api from '../../../lib/api';
 import { FiUploadCloud, FiFileText, FiX, FiChevronsRight, FiImage, FiVideo, FiMusic, FiInfo } from 'react-icons/fi';
 import { supportedFormats } from '../../../lib/formats';
+import { requestNotifPermission } from '../../../hooks/useConversionPoller';
 import FormatSelector from './FormatSelector';
 
 const getFileIcon = (type = '') => {
@@ -58,6 +59,9 @@ const FileUploader = ({ onUploadSuccess, conversionHint }) => {
     else if (['Document','Presentation','Spreadsheet'].includes(category)) endpoint = '/convert/document';
     else if (['Video','Audio'].includes(category)) endpoint = '/convert/media';
     else { setError('Cannot determine conversion route.'); setIsUploading(false); return; }
+
+    // Ask for notification permission NOW (user is still on page)
+    await requestNotifPermission();
 
     const formData = new FormData();
     formData.append('file', file);
