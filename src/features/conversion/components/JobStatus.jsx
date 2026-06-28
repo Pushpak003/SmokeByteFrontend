@@ -1,55 +1,62 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import api from '../../../lib/api';
 import Spinner from '../../../components/ui/Spinner.jsx';
-import { FiCheckCircle, FiXCircle, FiDownload, FiRefreshCw, FiPlusCircle } from 'react-icons/fi';
+import {
+  FiCheckCircle, FiXCircle, FiDownload,
+  FiRefreshCw, FiPlusCircle, FiClock
+} from 'react-icons/fi';
+import useConversionPoller, { sendBrowserNotif } from '../../../hooks/useConversionPoller';
 
-const JobStatus = ({ jobId, onReset }) => {
-  const [status, setStatus] = useState('processing');
-  const [downloadUrl, setDownloadUrl] = useState('');
-  const [error, setError] = useState('');
+const JobStatus = ({ jobId, onReset, toast }) => {
+  const [status,        setStatus]        = useState('pending');
+  const [fileId,        setFileId]        = useState(null);
+  const [filename,      setFilename]      = useState('');
+  const [targetFormat,  setTargetFormat]  = useState('');
+  const [error,         setError]         = useState('');
   const [isDownloading, setIsDownloading] = useState(false);
 
-  useEffect(() => {
-    if (!jobId) return;
-    const intervalId = setInterval(async () => {
-      try {
-        const response = await api.get(`/status/${jobId}`);
-        const currentStatus = response.data.status;
-        if (currentStatus === 'completed') {
-          setStatus('completed');
-          setDownloadUrl(response.data.fileUrl || response.data.url);
-          clearInterval(intervalId);
-        } else if (currentStatus === 'failed') {
-          setStatus('failed');
-          setError(response.data.reason || 'File conversion failed on the server.');
-          clearInterval(intervalId);
-        }
-      } catch {
-        setStatus('failed');
-        setError('Could not get job status.');
-        clearInterval(intervalId);
+  useConversionPoller({
+    jobId,
+    onTick: (s) => setStatus(s),
+    onDone: (data) => {
+      setStatus(data.status);
+      if (data.status === 'completed') {
+        setFileId(data.fileId);
+        setFilename(data.filename || '');
+        setTargetFormat(data.targetFormat || '');
+        // Clear persisted jobId — job is done
+        localStorage.removeItem('smokebyte_active_job');
+        toast?.success('✅ File converted! Ready to download.');
+        sendBrowserNotif('SmokeByte — Done!', `${data.filename || 'Your file'} is ready.`);
+      } else {
+        setError(data.error || 'Conversion failed.');
+        localStorage.removeItem('smokebyte_active_job');
+        toast?.error('❌ Conversion failed. Please try again.');
+        sendBrowserNotif('SmokeByte — Failed', data.error || 'Conversion failed.');
       }
-    }, 3000);
-    return () => clearInterval(intervalId);
-  }, [jobId]);
+    },
+  });
 
   const handleDownload = async () => {
+    if (!fileId) return;
     setIsDownloading(true);
     setError('');
     try {
-      const response = await fetch(downloadUrl);
-      if (!response.ok) throw new Error('Network response was not ok');
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+      const res  = await api.get(`/download/${fileId}`, { responseType: 'blob' });
+      const blob = new Blob([res.data], { type: res.headers['content-type'] });
+      const url  = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', downloadUrl.split('/').pop());
+      link.href  = url;
+      const name = filename
+        ? `${filename.split('.').slice(0, -1).join('.')}.${targetFormat}`
+        : `converted.${targetFormat}`;
+      link.setAttribute('download', name);
       document.body.appendChild(link);
       link.click();
-      link.parentNode.removeChild(link);
+      document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch {
-      setError('Could not download the file. Please try again.');
+      setError('Download failed. Please try again.');
     } finally {
       setIsDownloading(false);
     }
@@ -57,11 +64,22 @@ const JobStatus = ({ jobId, onReset }) => {
 
   return (
     <div className="job-status-card">
+
+      {status === 'pending' && (
+        <>
+          <FiClock size={52} className="status-icon pending" />
+          <h3>Queued</h3>
+          <p>Your file is waiting in the queue.</p>
+          <p className="status-leave-note">You can leave this page — we'll notify you when done.</p>
+        </>
+      )}
+
       {status === 'processing' && (
         <>
           <Spinner />
-          <h3>Processing your file…</h3>
-          <p>This may take a moment. Hang tight!</p>
+          <h3>Converting…</h3>
+          <p>Your file is being converted right now.</p>
+          <p className="status-leave-note">You can leave this page — we'll notify you when done.</p>
         </>
       )}
 
@@ -69,16 +87,15 @@ const JobStatus = ({ jobId, onReset }) => {
         <>
           <FiCheckCircle size={52} className="status-icon success" />
           <h3>Conversion Successful!</h3>
-          <p>Your file is ready. Download it or convert another one.</p>
-
+          <p>Your file is ready to download.</p>
           <button onClick={handleDownload} className="download-button" disabled={isDownloading}>
-            {isDownloading ? <><Spinner size="sm" /> Downloading…</> : <><FiDownload /> Download File</>}
+            {isDownloading
+              ? <><Spinner size="sm" /> Downloading…</>
+              : <><FiDownload /> Download File</>}
           </button>
-
           <button onClick={onReset} className="convert-another-button">
             <FiPlusCircle size={15} /> Convert Another File
           </button>
-
           {error && <p className="error-message">{error}</p>}
         </>
       )}
@@ -93,6 +110,7 @@ const JobStatus = ({ jobId, onReset }) => {
           </button>
         </>
       )}
+
     </div>
   );
 };

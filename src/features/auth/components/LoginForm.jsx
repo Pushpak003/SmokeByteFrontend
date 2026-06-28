@@ -1,16 +1,15 @@
-// src/features/auth/components/LoginForm.jsx
-
 import { useState } from 'react';
-import { FiLogIn, FiUser, FiEye,FiEyeOff,FiLock } from 'react-icons/fi';
-import Input from '../../../components/ui/Input'; // Hamara naya component
+import { FiLogIn, FiUser, FiEye, FiEyeOff, FiLock } from 'react-icons/fi';
+import Input from '../../../components/ui/Input';
 
 const LoginForm = ({ onSubmit, error, loading }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername]       = useState('');
+  const [password, setPassword]       = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (loading) return; 
+    if (loading) return;
     onSubmit({ username, password });
   };
 
@@ -25,22 +24,20 @@ const LoginForm = ({ onSubmit, error, loading }) => {
       />
       <div className="password-field">
         <Input
-          type={showPassword ? 'text' : 'password'} // Dynamic type
+          type={showPassword ? 'text' : 'password'}
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           icon={<FiLock />}
           required
         />
-        <span onClick={() => setShowPassword(!showPassword)} className="password-toggle-icon">
+        <span onClick={() => setShowPassword(s => !s)} className="password-toggle-icon">
           {showPassword ? <FiEyeOff /> : <FiEye />}
         </span>
       </div>
-      
       {error && <p className="error-message">{error}</p>}
-      
       <button type="submit" className="auth-button" disabled={loading}>
-        <FiLogIn />{loading ? "Logging in..." : "Login"}
+        <FiLogIn /> {loading ? 'Logging in…' : 'Login'}
       </button>
     </form>
   );

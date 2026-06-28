@@ -668,3 +668,159 @@ textarea {
   color: var(--purple);
   background: var(--purple-light);
 }
+/* ── GOOGLE OAUTH BUTTON ─────────────────────────────── */
+.btn-google {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.82rem 1.25rem;
+  border-radius: var(--r-md);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.93rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+}
+.btn-google:hover {
+  border-color: #c4b5fd;
+  background: #fdfcff;
+  box-shadow: 0 0 0 3px rgba(109,40,217,0.07);
+  text-decoration: none;
+  color: var(--text);
+}
+
+/* ── AUTH DIVIDER ────────────────────────────────────── */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.1rem 0;
+  color: var(--text-3);
+  font-size: 0.82rem;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── HISTORY STATUS BADGES ───────────────────────────── */
+.history-status-badge {
+  display: inline-block;
+  margin-top: 0.3rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.status-badge--done    { background: var(--success-bg); color: var(--success); }
+.status-badge--failed  { background: var(--error-bg);   color: var(--error);   }
+.status-badge--pending { background: #fef3c7;           color: #92400e;        }
+
+.history-failed-icon  { color: var(--error);  display: flex; }
+.history-pending-icon { color: #d97706;       display: flex; }
+
+/* ── JOB STATUS pending color ────────────────────────── */
+.status-icon.pending { color: #d97706; }
+
+/* ── TOAST NOTIFICATIONS ─────────────────────────────── */
+.toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  z-index: 9999;
+  max-width: 360px;
+  width: calc(100vw - 3rem);
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-md);
+  font-size: 0.9rem;
+  font-weight: 500;
+  animation: toast-in 0.22s ease;
+}
+.toast--success {
+  background: var(--success-bg);
+  color: #065f46;
+  border: 1px solid rgba(5,150,105,0.2);
+}
+.toast--error {
+  background: var(--error-bg);
+  color: #991b1b;
+  border: 1px solid rgba(220,38,38,0.2);
+}
+.toast-icon  { display: flex; flex-shrink: 0; }
+.toast-msg   { flex: 1; }
+.toast-close {
+  background: none; border: none; cursor: pointer;
+  display: flex; padding: 0.2rem; opacity: 0.5;
+  transition: opacity 0.15s; color: inherit; flex-shrink: 0;
+}
+.toast-close:hover { opacity: 1; }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .toast-container {
+    bottom: 1rem;
+    right: 0.75rem;
+    left: 0.75rem;
+    width: auto;
+    max-width: none;
+  }
+}
+.history-col-preview { width: 64px; }
+.history-col-details { }
+.history-col-format  { width: 90px; }
+.history-col-action  { width: 130px; text-align: right; }
+ 
+.history-format-tag {
+  display: inline-block;
+  background: var(--purple-light);
+  color: var(--purple-dark);
+  border: 1px solid rgba(109,40,217,0.15);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 99px;
+  letter-spacing: 0.04em;
+}
+
+/* ── JOB STATUS — leave note ─────────────────────── */
+.status-leave-note {
+  font-size: 0.8rem !important;
+  color: var(--text-3) !important;
+  background: var(--purple-light);
+  border-radius: var(--r-sm);
+  padding: 0.4rem 0.75rem;
+  border: 1px solid rgba(109,40,217,0.12);
+  margin-top: -0.25rem;
+}
+ 
+/* ── HISTORY TABLE mobile ────────────────────────── */
+@media (max-width: 600px) {
+  .history-col-format { display: none; }
+  .history-col-action { width: 100px; }
+  .history-table th, .history-table td { padding: 0.75rem 0.75rem; }
+}
+ 
