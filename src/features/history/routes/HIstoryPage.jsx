@@ -41,10 +41,10 @@ const HistoryPage = () => {
           <table className="history-table">
             <thead>
               <tr>
-                <th style={{ width: '64px' }}>Type</th>
-                <th>File Details</th>
-                <th style={{ width: '90px' }}>Format</th>
-                <th style={{ width: '130px', textAlign: 'right' }}>Action</th>
+                <th style={{ width: '72px' }}>TYPE</th>
+                <th>FILE DETAILS</th>
+                <th style={{ width: '90px' }}>PREVIEW</th>
+                <th style={{ width: '160px', textAlign: 'right' }}>ACTION</th>
               </tr>
             </thead>
             <tbody>

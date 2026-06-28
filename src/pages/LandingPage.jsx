@@ -1,18 +1,33 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { FiArrowRight, FiShuffle, FiLock, FiZap, FiBox, FiCheckCircle, FiCloud } from 'react-icons/fi';
+import {
+  FiArrowRight, FiShuffle, FiLock, FiZap, FiBox, FiCheckCircle, FiCloud,
+} from 'react-icons/fi';
+import {
+  FaFilePdf, FaFileVideo, FaFileWord, FaFileImage,
+  FaFileAudio, FaFileExcel, FaFilePowerpoint,
+} from 'react-icons/fa';
 import './LandingPage.css';
 
 const features = [
-  { icon: <FiShuffle size={24}/>, title: 'Every Format, Covered', desc: 'Images, docs, audio, video — convert between the most popular formats in seconds.' },
-  { icon: <FiZap size={24}/>, title: 'Async Processing', desc: 'Upload and go. Conversions run in the background — your file is ready when you are.' },
-  { icon: <FiLock size={24}/>, title: 'Secure by Default', desc: '256-bit SSL on every transfer. Files are deleted automatically after processing.' },
-  { icon: <FiBox size={24}/>, title: 'No Install Needed', desc: 'Runs entirely in your browser. No plugins, no downloads, no setup.' },
-  { icon: <FiCheckCircle size={24}/>, title: 'Quality Preserved', desc: 'Advanced tooling keeps your document structure, resolution, and metadata intact.' },
-  { icon: <FiCloud size={24}/>, title: 'Cloud Native', desc: 'Scalable cloud infrastructure means fast, reliable conversions every time.' },
+  { icon: <FiShuffle size={22}/>, title: 'Every Format, Covered', desc: 'Images, docs, audio, video — convert between 50+ formats in seconds.' },
+  { icon: <FiZap size={22}/>, title: 'Async Processing', desc: 'Upload and go. Conversions run in the background — your file is ready when you are.' },
+  { icon: <FiLock size={22}/>, title: 'Secure by Default', desc: '256-bit SSL on every transfer. Files are deleted automatically after processing.' },
+  { icon: <FiBox size={22}/>, title: 'No Install Needed', desc: 'Runs entirely in your browser. No plugins, no downloads, no setup.' },
+  { icon: <FiCheckCircle size={22}/>, title: 'Quality Preserved', desc: 'Advanced tooling keeps your document structure, resolution, and metadata intact.' },
+  { icon: <FiCloud size={22}/>, title: 'Cloud Native', desc: 'Scalable cloud infrastructure means fast, reliable conversions every time.' },
 ];
 
-const floatingBadges = ['PDF', 'MP4', 'DOCX', 'PNG', 'MP3', 'XLSX', 'WEBP', 'MOV'];
+const floatingBadges = [
+  { label: 'PDF',  icon: <FaFilePdf />,        color: '#ef4444', glow: 'rgba(239,68,68,0.35)'    },
+  { label: 'MP4',  icon: <FaFileVideo />,       color: '#8b5cf6', glow: 'rgba(139,92,246,0.35)'   },
+  { label: 'DOCX', icon: <FaFileWord />,        color: '#3b82f6', glow: 'rgba(59,130,246,0.35)'   },
+  { label: 'PNG',  icon: <FaFileImage />,       color: '#f59e0b', glow: 'rgba(245,158,11,0.35)'   },
+  { label: 'MP3',  icon: <FaFileAudio />,       color: '#ec4899', glow: 'rgba(236,72,153,0.35)'   },
+  { label: 'XLSX', icon: <FaFileExcel />,       color: '#10b981', glow: 'rgba(16,185,129,0.35)'   },
+  { label: 'PPTX', icon: <FaFilePowerpoint />,  color: '#f97316', glow: 'rgba(249,115,22,0.35)'   },
+  { label: 'MOV',  icon: <FaFileVideo />,       color: '#a78bfa', glow: 'rgba(167,139,250,0.35)'  },
+];
 
 const LandingPage = () => {
   const { user } = useAuth();
@@ -25,8 +40,15 @@ const LandingPage = () => {
         <div className="hero-orb hero-orb--3" />
 
         <div className="floating-badges">
-          {floatingBadges.map((b, i) => (
-            <span key={b} className="floating-badge" style={{ '--i': i }}>{b}</span>
+          {floatingBadges.map(({ label, icon, color, glow }, i) => (
+            <span
+              key={label}
+              className="floating-badge"
+              style={{ '--i': i, '--badge-color': color, '--badge-glow': glow }}
+            >
+              <span className="floating-badge-icon" style={{ color }}>{icon}</span>
+              <span className="floating-badge-label">{label}</span>
+            </span>
           ))}
         </div>
 
@@ -53,18 +75,14 @@ const LandingPage = () => {
                 <Link to="/dashboard" className="btn-primary-hero">
                   Go to Dashboard <FiArrowRight />
                 </Link>
-                <Link to="/history" className="btn-ghost-hero">
-                  View History
-                </Link>
+                <Link to="/history" className="btn-ghost-hero">View History</Link>
               </>
             ) : (
               <>
                 <Link to="/signup" className="btn-primary-hero">
                   Get Started Free <FiArrowRight />
                 </Link>
-                <Link to="/login" className="btn-ghost-hero">
-                  Sign In
-                </Link>
+                <Link to="/login" className="btn-ghost-hero">Sign In</Link>
               </>
             )}
           </div>
