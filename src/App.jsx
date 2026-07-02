@@ -27,18 +27,18 @@ const ProtectedRoute = () => {
 };
 
 const GlobalPoller = () => {
-  const { jobId, clearJob } = useActiveJobContext();
+  const { jobId } = useActiveJobContext(); // clearJob hata diya — JobStatus ka onReset karega
   const toast = useToastContext();
 
   useConversionPoller({
     jobId,
     onTick: () => {},
     onDone: (data) => {
-      clearJob();
+      // clearJob() yahan nahi — Dashboard pe JobStatus dikhta rahe taaki
+      // user download button dekh sake aur khud "Convert Another" click kare
       if (data.status === 'completed') {
-        // Pass onClick — user click kare to dashboard pe pahunch jaye
         toast.success(
-          '✅ Converted! Click to download.',
+          '✅ File converted! Download button is ready.',
           (navigate) => navigate('/dashboard')
         );
         sendBrowserNotif(
